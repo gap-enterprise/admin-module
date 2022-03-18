@@ -24,8 +24,8 @@
 package io.surati.gap.admin.module.prop;
 
 import io.surati.gap.admin.module.api.Company;
-import liquibase.util.file.FilenameUtils;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.IOUtils;
 
