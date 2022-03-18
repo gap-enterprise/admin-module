@@ -110,8 +110,7 @@ public interface User extends Person {
 		
 		@Override
 		public void update(String name) {
-			// TODO Auto-generated method stub
-			
+
 		}
 		
 		@Override
@@ -126,82 +125,74 @@ public interface User extends Person {
 		
 		@Override
 		public void update(String login, String name) {
-			// TODO Auto-generated method stub
-			
+
 		}
 		
 		@Override
 		public Salt salt() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
 		@Override
 		public Profile profile() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
 		@Override
 		public String password() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
 		@Override
 		public String login() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
 		@Override
 		public void forceChangePassword(String newPassword) {
-			// TODO Auto-generated method stub
 			
 		}
 		
 		@Override
 		public void changePassword(String oldpassword, String password) {
-			// TODO Auto-generated method stub
-			
+
 		}
 		
 		@Override
 		public boolean blocked() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 		
 		@Override
 		public void block(boolean enable) {
-			// TODO Auto-generated method stub
+			
 		}
 		
 		@Override
 		public void assign(Profile profile) {
-			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void changePhoto(InputStream content, String ext) throws IOException {
-			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public InputStream photo() throws IOException {
-			// TODO Auto-generated method stub
+			
 			return null;
 		}
 
 		@Override
 		public String photoBase64() {
-			// TODO Auto-generated method stub
+			
 			return null;
 		}
 
 		@Override
 		public String photoLocation() {
-			// TODO Auto-generated method stub
+			
 			return null;
 		}
 	};
