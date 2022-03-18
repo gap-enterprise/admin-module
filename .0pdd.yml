@@ -1,5 +1,5 @@
-format:
-  - short-title
-  - title-length=100
+errors:
+  - baudoliver7@gmail.com
 tags:
-  - tech-debt
+  - pdd
+  - bug
