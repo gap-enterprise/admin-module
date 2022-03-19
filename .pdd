@@ -1,6 +1,7 @@
 --source=.
 --verbose
 --exclude logo.png
+--exclude src/main/java/io/surati/gap/admin/module/jooq/generated/*
 --exclude target/**/*
 --exclude src/main/resources/**/*
 --exclude src/test/resources/**/*
