@@ -101,7 +101,7 @@ final class DbLogTest {
     	final Iterable<EventLog> events = new DbLog(this.source, DbLogTest.AUTHOR, DbLogTest.IP_ADDRESS).iterate();
     	for (EventLog event : events) {
             MatcherAssert.assertThat(
-                    new DbEventLogs(this.source).get(event.id()),
+                    event,
                     new Satisfies<>(
                         evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                             evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
