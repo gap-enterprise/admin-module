@@ -98,15 +98,15 @@ final class DbLogTest {
     
     @Test
     public void iterate() {
-    	final Iterable<EventLog> eventlog = new DbLog(this.source, DbLogTest.AUTHOR, DbLogTest.IP_ADDRESS).iterate();
-    	for (EventLog currenteventlog : eventlog) {
+    	final Iterable<EventLog> events = new DbLog(this.source, DbLogTest.AUTHOR, DbLogTest.IP_ADDRESS).iterate();
+    	for (EventLog event : events) {
             MatcherAssert.assertThat(
-                    new DbEventLogs(this.source).get(1L),
+                    new DbEventLogs(this.source).get(event.id()),
                     new Satisfies<>(
                         evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                             evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
-                            evt.message().equals(currenteventlog.message()) &&
-                            evt.level() == currenteventlog.level()
+                            evt.message().equals(event.message()) &&
+                            evt.level() == event.level()
                     )
                 );
 		}
