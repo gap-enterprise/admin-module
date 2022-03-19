@@ -4,6 +4,8 @@ import com.lightweight.db.EmbeddedPostgreSQLDataSource;
 import com.lightweight.db.LiquibaseDataSource;
 
 import io.surati.gap.admin.module.api.EventLog;
+import io.surati.gap.admin.module.api.EventLogs;
+import io.surati.gap.admin.module.api.Log;
 
 import javax.sql.DataSource;
 import org.hamcrest.MatcherAssert;
@@ -26,28 +28,32 @@ final class DbLogTest {
     private static final String IP_ADDRESS = "127.0.0.1";
 
     /**
-     * Data source.
+     * Log log.
      */
-    private DataSource source;
+    private Log log;
+    private EventLogs events;
 
     @BeforeEach
     void setup() {
-        this.source = new LiquibaseDataSource(
+    	final DataSource source;
+    	source = new LiquibaseDataSource(
             new EmbeddedPostgreSQLDataSource(),
             "liquibase/db-admin.changelog-master.xml"
         );
+    	this.log = new DbLog(
+            source,
+            DbLogTest.AUTHOR,
+            DbLogTest.IP_ADDRESS
+        );
+    	this.events = new DbEventLogs(source);
     }
 
     @Test
     void addInfoEvent() {
         final String message = "I'm connected.";
-        new DbLog(
-            this.source,
-            DbLogTest.AUTHOR,
-            DbLogTest.IP_ADDRESS
-        ).info(message);
+        log.info(message);
         MatcherAssert.assertThat(
-            new DbEventLogs(this.source).get(1L),
+            events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -61,13 +67,9 @@ final class DbLogTest {
     void addErrorEvent() {
         final String message = "HTTP Error 500";
         final String details = "HTTP Error 500 (Internal Server Error).";
-        new DbLog(
-            this.source,
-            DbLogTest.AUTHOR,
-            DbLogTest.IP_ADDRESS
-        ).error(message, details);
+        log.error(message, details);
         MatcherAssert.assertThat(
-            new DbEventLogs(this.source).get(1L),
+            events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -80,13 +82,9 @@ final class DbLogTest {
     @Test
     void addWarningEvent() {
         final String message = "Ouh! The username is invalid.";
-        new DbLog(
-            this.source,
-            DbLogTest.AUTHOR,
-            DbLogTest.IP_ADDRESS
-        ).warning(message);
+        log.warning(message);
         MatcherAssert.assertThat(
-            new DbEventLogs(this.source).get(1L),
+            events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -98,7 +96,9 @@ final class DbLogTest {
     
     @Test
     public void iterate() {
-    	final Iterable<EventLog> events = new DbLog(this.source, DbLogTest.AUTHOR, DbLogTest.IP_ADDRESS).iterate();
+    	log.info("Welcome admin.");
+    	log.warning("Something is wrong right now!");
+    	final Iterable<EventLog> events = log.iterate();
     	for (EventLog event : events) {
             MatcherAssert.assertThat(
                     event,
