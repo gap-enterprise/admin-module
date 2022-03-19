@@ -16,88 +16,72 @@
  */
 package io.surati.gap.admin.module.db;
 
-import com.jcabi.jdbc.JdbcSession;
-import com.jcabi.jdbc.ListOutcome;
-import com.jcabi.jdbc.SingleOutcome;
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.admin.module.api.EventLogs;
-import io.surati.gap.admin.module.exceptions.DatabaseException;
-import org.cactoos.text.Joined;
-
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
 
+/**
+ * Log events from database.
+ *
+ * @since 0.1
+ */
 public final class DbEventLogs implements EventLogs {
-	
+
+	/**
+	 * Table of log events.
+	 */
+	private static final io.surati.gap.admin.module.jooq.generated.tables.EventLog EVENT_LOG =
+		io.surati.gap.admin.module.jooq.generated.tables.EventLog.EVENT_LOG;
+
+	/**
+	 * jOOQ database context.
+	 */
+	private final DSLContext ctx;
+
+	/**
+	 * Data source.
+	 */
 	private final DataSource source;
 	
 	/**
 	 * Ctor.
-	 * @param source
+	 * @param source Data source.
 	 */
 	public DbEventLogs(final DataSource source) {
 		this.source = source;
+		this.ctx = DSL.using(new DefaultConfiguration().set(this.source));
 	}
 	
 	@Override
-	public EventLog get(Long id) {	
-		try(
-				final Connection connection = source.getConnection();
-				final PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM event_log WHERE id=?");
-			){
-				pstmt.setLong(1, id);
-			
-				try(final ResultSet rs = pstmt.executeQuery()){
-					if(rs.next()) {
-						return new DbEventLog(source, id);
-					} else {
-						throw new IllegalArgumentException(String.format("Event log with ID %s not found !", id));
-					}			
-				}
-			} catch(SQLException e) {
-				throw new DatabaseException(e);
-			}
+	public EventLog get(final Long id) {
+		if (this.ctx.fetchCount(EVENT_LOG) == 0) {
+			throw new IllegalArgumentException(
+				String.format("Event log with ID %s not found !", id)
+			);
+		}
+		return new DbEventLog(source, id);
 	}
 
 	@Override
 	public Iterable<EventLog> iterate() {
-		try {
-            return 
-                new JdbcSession(this.source)
-                    .sql(
-                        new Joined(
-                            " ",
-                            "SELECT id FROM event_log",
-            				"ORDER BY id DESC"
-                        ).toString()
-                    )
-                    .select(
-                        new ListOutcome<>(
-                            rset ->
-                            new DbEventLog(
-                                this.source,
-                                rset.getLong(1)
-                            )
-                        )
-                    );
-        } catch (SQLException ex) {
-            throw new DatabaseException(ex);
-        }
+		return this.ctx
+			.selectFrom(EVENT_LOG)
+			.orderBy(EVENT_LOG.ID.desc())
+			.fetch(
+				rec -> new DbEventLog(
+					this.source, rec.getId()
+				)
+			);
 	}
 
 	@Override
 	public Long count() {
-		try {
-			return
-				new JdbcSession(this.source)
-					.sql("SELECT COUNT(*) FROM event_log")
-					.select(new SingleOutcome<>(Long.class));
-		} catch(SQLException ex) {
-			throw new DatabaseException(ex);
-		}
+		return Long.valueOf(
+			this.ctx.fetchCount(EVENT_LOG)
+		);
 	}
 
 }
