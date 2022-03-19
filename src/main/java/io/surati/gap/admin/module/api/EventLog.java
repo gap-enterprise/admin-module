@@ -19,12 +19,52 @@ package io.surati.gap.admin.module.api;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 
+/**
+ * Log event.
+ *
+ * @since 0.1
+ */
 public interface EventLog {
+
+	/**
+	 * Get identifier.
+	 * @return Number
+	 */
 	Long id();
+
+	/**
+	 * Get date of event.
+	 * @return Datetime
+	 */
 	LocalDateTime date();
+
+	/**
+	 * Get level.
+	 * @return Level
+	 */
 	Level level();
+
+	/**
+	 * Get message.
+	 * @return Text
+	 */
 	String message();
+
+	/**
+	 * Get details on event.
+	 * @return Text
+	 */
 	String details();
+
+	/**
+	 * Get author.
+	 * @return login
+	 */
 	String author();
+
+	/**
+	 * Get IP address.
+	 * @return IP
+	 */
 	String ipAddress();
 }

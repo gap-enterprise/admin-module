@@ -16,9 +16,30 @@
  */
 package io.surati.gap.admin.module.api;
 
+/**
+ * Log events.
+ *
+ * @since 0.1
+ */
 public interface EventLogs {
 
+	/**
+	 * Get an event by its identifier;
+	 * @param id Identifier
+	 * @return Event
+	 * @throws IllegalArgumentException If not found
+	 */
 	EventLog get(Long id);
+
+	/**
+	 * Iterate over all items.
+	 * @return Iterable
+	 */
 	Iterable<EventLog> iterate();
+
+	/**
+	 * Get total number of results.
+	 * @return Total
+	 */
 	Long count();
 }
