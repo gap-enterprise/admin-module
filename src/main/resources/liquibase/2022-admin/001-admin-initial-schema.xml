@@ -1,85 +1,101 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright (c) 2022 Surati
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to read
+the Software only. Permissions is hereby NOT GRANTED to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    <changeSet author="liquibase (generated)" id="1647609485878-1">
-        <createTable tableName="person">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="person_pkey"/>
-            </column>
-            <column name="name" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-4">
-        <createTable tableName="app_user">
-            <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="app_user_pkey"/>
-            </column>
-            <column name="login" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="password" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="salt" type="VARCHAR(30)">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValueBoolean="false" name="blocked" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="profile_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-5">
-        <createTable tableName="profile">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="profile_pkey"/>
-            </column>
-            <column name="name" type="VARCHAR(225)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-13">
-        <createTable tableName="event_log">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="event_log_pkey"/>
-            </column>
-            <column name="date" type="TIMESTAMP WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="message" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="details" type="VARCHAR(255)"/>
-            <column name="level_id" type="VARCHAR(15)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="author" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ip_address" type="VARCHAR(15)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-30">
-        <createTable tableName="access_profile">
-            <column name="access_id" type="VARCHAR(100)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="access_profile_pkey"/>
-            </column>
-            <column name="profile_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="access_profile_pkey"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-35">
-        <addForeignKeyConstraint baseColumnNames="id" baseTableName="app_user" constraintName="app_user_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="person" validate="true"/>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-59">
-        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="access_profile" constraintName="profile_access_profile_profile_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="profile" validate="true"/>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1647609485878-60">
-        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="app_user" constraintName="profile_app_user_profile_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="profile" validate="true"/>
-    </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-1">
+    <createTable tableName="person">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="person_pkey"/>
+      </column>
+      <column name="name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-4">
+    <createTable tableName="app_user">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="app_user_pkey"/>
+      </column>
+      <column name="login" type="VARCHAR(25)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="password" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="salt" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueBoolean="false" name="blocked" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="profile_id" type="BIGINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-5">
+    <createTable tableName="profile">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="profile_pkey"/>
+      </column>
+      <column name="name" type="VARCHAR(225)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-13">
+    <createTable tableName="event_log">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="event_log_pkey"/>
+      </column>
+      <column name="date" type="TIMESTAMP WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="message" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="details" type="VARCHAR(255)"/>
+      <column name="level_id" type="VARCHAR(15)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="author" type="VARCHAR(25)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ip_address" type="VARCHAR(15)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-30">
+    <createTable tableName="access_profile">
+      <column name="access_id" type="VARCHAR(100)">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="access_profile_pkey"/>
+      </column>
+      <column name="profile_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="access_profile_pkey"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-35">
+    <addForeignKeyConstraint baseColumnNames="id" baseTableName="app_user" constraintName="app_user_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="person" validate="true"/>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-59">
+    <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="access_profile" constraintName="profile_access_profile_profile_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="profile" validate="true"/>
+  </changeSet>
+  <changeSet author="liquibase (generated)" id="1647609485878-60">
+    <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="app_user" constraintName="profile_app_user_profile_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="profile" validate="true"/>
+  </changeSet>
 </databaseChangeLog>
