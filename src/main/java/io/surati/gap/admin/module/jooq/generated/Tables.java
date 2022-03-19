@@ -6,8 +6,6 @@ package io.surati.gap.admin.module.jooq.generated;
 
 import io.surati.gap.admin.module.jooq.generated.tables.AccessProfile;
 import io.surati.gap.admin.module.jooq.generated.tables.AppUser;
-import io.surati.gap.admin.module.jooq.generated.tables.Databasechangelog;
-import io.surati.gap.admin.module.jooq.generated.tables.Databasechangeloglock;
 import io.surati.gap.admin.module.jooq.generated.tables.EventLog;
 import io.surati.gap.admin.module.jooq.generated.tables.Person;
 import io.surati.gap.admin.module.jooq.generated.tables.Profile;
@@ -28,16 +26,6 @@ public class Tables {
      * The table <code>public.app_user</code>.
      */
     public static final AppUser APP_USER = AppUser.APP_USER;
-
-    /**
-     * The table <code>public.databasechangelog</code>.
-     */
-    public static final Databasechangelog DATABASECHANGELOG = Databasechangelog.DATABASECHANGELOG;
-
-    /**
-     * The table <code>public.databasechangeloglock</code>.
-     */
-    public static final Databasechangeloglock DATABASECHANGELOGLOCK = Databasechangeloglock.DATABASECHANGELOGLOCK;
 
     /**
      * The table <code>public.event_log</code>.

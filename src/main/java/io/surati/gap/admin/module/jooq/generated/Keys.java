@@ -6,13 +6,11 @@ package io.surati.gap.admin.module.jooq.generated;
 
 import io.surati.gap.admin.module.jooq.generated.tables.AccessProfile;
 import io.surati.gap.admin.module.jooq.generated.tables.AppUser;
-import io.surati.gap.admin.module.jooq.generated.tables.Databasechangeloglock;
 import io.surati.gap.admin.module.jooq.generated.tables.EventLog;
 import io.surati.gap.admin.module.jooq.generated.tables.Person;
 import io.surati.gap.admin.module.jooq.generated.tables.Profile;
 import io.surati.gap.admin.module.jooq.generated.tables.records.AccessProfileRecord;
 import io.surati.gap.admin.module.jooq.generated.tables.records.AppUserRecord;
-import io.surati.gap.admin.module.jooq.generated.tables.records.DatabasechangeloglockRecord;
 import io.surati.gap.admin.module.jooq.generated.tables.records.EventLogRecord;
 import io.surati.gap.admin.module.jooq.generated.tables.records.PersonRecord;
 import io.surati.gap.admin.module.jooq.generated.tables.records.ProfileRecord;
@@ -37,7 +35,6 @@ public class Keys {
 
     public static final UniqueKey<AccessProfileRecord> ACCESS_PROFILE_PKEY = Internal.createUniqueKey(AccessProfile.ACCESS_PROFILE, DSL.name("access_profile_pkey"), new TableField[] { AccessProfile.ACCESS_PROFILE.ACCESS_ID, AccessProfile.ACCESS_PROFILE.PROFILE_ID }, true);
     public static final UniqueKey<AppUserRecord> APP_USER_PKEY = Internal.createUniqueKey(AppUser.APP_USER, DSL.name("app_user_pkey"), new TableField[] { AppUser.APP_USER.ID }, true);
-    public static final UniqueKey<DatabasechangeloglockRecord> PK_DATABASECHANGELOGLOCK = Internal.createUniqueKey(Databasechangeloglock.DATABASECHANGELOGLOCK, DSL.name("pk_databasechangeloglock"), new TableField[] { Databasechangeloglock.DATABASECHANGELOGLOCK.ID }, true);
     public static final UniqueKey<EventLogRecord> EVENT_LOG_PKEY = Internal.createUniqueKey(EventLog.EVENT_LOG, DSL.name("event_log_pkey"), new TableField[] { EventLog.EVENT_LOG.ID }, true);
     public static final UniqueKey<PersonRecord> PERSON_PKEY = Internal.createUniqueKey(Person.PERSON, DSL.name("person_pkey"), new TableField[] { Person.PERSON.ID }, true);
     public static final UniqueKey<ProfileRecord> PROFILE_PKEY = Internal.createUniqueKey(Profile.PROFILE, DSL.name("profile_pkey"), new TableField[] { Profile.PROFILE.ID }, true);

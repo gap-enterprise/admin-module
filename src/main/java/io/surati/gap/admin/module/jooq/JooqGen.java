@@ -52,6 +52,7 @@ public final class JooqGen {
                             new Database()
                                 .withName("org.jooq.meta.h2.H2Database")
                                 .withIncludes(".*")
+                                .withExcludes("databasechangelog|databasechangeloglock")
                                 .withInputSchema("public"))
                         .withTarget(
                             new Target()
