@@ -1,21 +1,14 @@
 /*
- * MIT License
- *
  * Copyright (c) 2022 Surati
- *
+
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
+ * of this software and associated documentation files (the "Software"), to read
+ * the Software only. Permissions is hereby NOT GRANTED to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software.
+	
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -23,42 +16,79 @@
  */
 package io.surati.gap.admin.module.db;
 
-import com.jcabi.jdbc.JdbcSession;
-import com.jcabi.jdbc.ListOutcome;
-import com.jcabi.jdbc.Outcome;
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.admin.module.api.Log;
-import io.surati.gap.admin.module.exceptions.DatabaseException;
 import io.surati.gap.admin.module.rq.RqUser;
-import org.cactoos.iterable.IterableOf;
-import org.cactoos.text.Joined;
-import org.takes.Request;
-
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
+import org.cactoos.iterable.IterableOf;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
+import org.takes.Request;
 
+/**
+ * Log that stores events in database.
+ *
+ * @since 0.1
+ */
 public final class DbLog implements Log {
 
+	/**
+	 * Table of log events.
+	 */
+	private static final io.surati.gap.admin.module.jooq.generated.tables.EventLog EVENT_LOG =
+		io.surati.gap.admin.module.jooq.generated.tables.EventLog.EVENT_LOG;
+
+	/**
+	 * jOOQ database context.
+	 */
+	private final DSLContext ctx;
+
+	/**
+	 * Data source.
+	 */
 	private final DataSource source;
-	
+
+	/**
+	 * IP address.
+	 */
 	private final String ipaddress;
-	
+
+	/**
+	 * Author.
+	 */
 	private final String author;
 
+	/**
+	 * Ctor.
+	 * @param source Data source
+	 * @param req Request
+	 */
 	public DbLog(final DataSource source, final Request req) {
 		this(source, loginFrom(source, req), ipAddressFrom(req));
 	}
 
+	/**
+	 * Ctor.
+	 * @param source Data source
+	 * @param author Author
+	 * @param ipaddress IP address
+	 */
 	public DbLog(final DataSource source, final String author, final String ipaddress) {
 		this.source = source;
+		this.ctx = DSL.using(new DefaultConfiguration().set(this.source));
 		this.author = author;
 		this.ipaddress = ipaddress;
 	}
 
+	/**
+	 * IP address from request.
+	 * @param req Request
+	 * @return IP address
+	 */
 	private static String ipAddressFrom(Request req) {
 		try {
 			for (String head : req.head()) {
@@ -71,7 +101,13 @@ public final class DbLog implements Log {
 			throw new RuntimeException(ex);
 		}
 	}
-	
+
+	/**
+	 * Login from request.
+	 * @param source Data source
+	 * @param req Request
+	 * @return Login
+	 */
 	private static String loginFrom(final DataSource source, final Request req) {
 		try {
 			return new RqUser(source, req).login();
@@ -95,58 +131,42 @@ public final class DbLog implements Log {
 		this.log(Level.SEVERE, message, details);
 	}
 
+	/**
+	 * Log with level.
+	 * @param level Level
+	 * @param message Message
+	 */
 	private void log(Level level, String message) {
 		this.log(level, message, null);
 	}
 
+	/**
+	 * Log with level and details.
+	 * @param level Level
+	 * @param message Message
+	 * @param details Details
+	 */
 	private void log(Level level, String message, String details) {
-		try {
-			new JdbcSession(this.source)
-	            .sql(
-	                new Joined(
-	                    " ",
-	                    "INSERT INTO event_log",
-	                    "(date, level_id, message, details, author, ip_address)",
-	                    "VALUES",
-	                    "(?, ?, ?, ?, ?, ?)"
-	                ).toString()
-	            )
-	            .set(Timestamp.valueOf(LocalDateTime.now()))
-	            .set(level.getName())
-	            .set(message)
-	            .set(details)
-	            .set(this.author)
-	            .set(this.ipaddress)
-	            .insert(Outcome.VOID);
-        } catch (SQLException ex) {
-            throw new DatabaseException(ex);
-        }
+		this.ctx.insertInto(EVENT_LOG)
+			.set(EVENT_LOG.DATE, LocalDateTime.now())
+			.set(EVENT_LOG.LEVEL_ID, level.getName())
+			.set(EVENT_LOG.MESSAGE, message)
+			.set(EVENT_LOG.DETAILS, details)
+			.set(EVENT_LOG.AUTHOR, this.author)
+			.set(EVENT_LOG.IP_ADDRESS, this.ipaddress)
+			.execute();
 	}
 
 	@Override
 	public Iterable<EventLog> iterate() {
-		try {
-            return 
-                new JdbcSession(this.source)
-                    .sql(
-                        new Joined(
-                            " ",
-                            "SELECT id FROM event_log",
-            				"ORDER BY id DESC"
-                        ).toString()
-                    )
-                    .select(
-                        new ListOutcome<>(
-                            rset ->
-                            new DbEventLog(
-                                this.source,
-                                rset.getLong(1)
-                            )
-                        )
-                    );
-        } catch (SQLException ex) {
-            throw new DatabaseException(ex);
-        }
+		return this.ctx
+			.selectFrom(EVENT_LOG)
+			.orderBy(EVENT_LOG.ID.desc())
+			.fetch(
+				rec -> new DbEventLog(
+					this.source, rec.getId()
+				)
+			);
 	}
 
 	@Override
