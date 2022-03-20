@@ -18,18 +18,19 @@ package io.surati.gap.admin.module.db;
 
 import com.lightweight.db.EmbeddedPostgreSQLDataSource;
 import com.lightweight.db.LiquibaseDataSource;
-
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.admin.module.api.EventLogs;
 import io.surati.gap.admin.module.api.Log;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
 import javax.sql.DataSource;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Satisfies;
-
-import java.util.logging.Level;
 
 final class DbLogTest {
 
@@ -44,15 +45,18 @@ final class DbLogTest {
     private static final String IP_ADDRESS = "127.0.0.1";
 
     /**
-     * Log log.
+     * Log.
      */
     private Log log;
+
+    /**
+     * Log events.
+     */
     private EventLogs events;
 
     @BeforeEach
     void setup() {
-    	final DataSource source;
-    	source = new LiquibaseDataSource(
+    	final DataSource source = new LiquibaseDataSource(
             new EmbeddedPostgreSQLDataSource(),
             "liquibase/db-admin.changelog-master.xml"
         );
@@ -67,9 +71,9 @@ final class DbLogTest {
     @Test
     void addInfoEvent() {
         final String message = "I'm connected.";
-        log.info(message);
+        this.log.info(message);
         MatcherAssert.assertThat(
-            events.get(1L),
+            this.events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -90,6 +94,7 @@ final class DbLogTest {
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
                     evt.message().equals(message) &&
+                    evt.details().equals(details) &&
                     evt.level() == Level.SEVERE
             )
         );
@@ -111,20 +116,31 @@ final class DbLogTest {
     }
     
     @Test
-    public void iterate() {
-    	log.info("Welcome admin.");
-    	log.warning("Something is wrong right now!");
-    	final Iterable<EventLog> events = log.iterate();
-    	for (EventLog event : events) {
+    void iterate() {
+        final String[] messages = { "Welcome admin.", "Something is wrong right now!" };
+        final Level[] levels = { Level.INFO, Level.WARNING };
+    	log.info(messages[0]);
+    	log.warning(messages[1]);
+        MatcherAssert.assertThat(
+            "Log should have two events.",
+            events.count(),
+            new IsEqual<>(Long.valueOf(messages.length))
+        );
+        int idx = messages.length;
+    	for (final EventLog event : log.iterate()) {
+            idx -= 1;
+            final String message = messages[idx];
+            final Level level = levels[idx];
             MatcherAssert.assertThat(
-                    event,
-                    new Satisfies<>(
-                        evt -> evt.author().equals(DbLogTest.AUTHOR) &&
-                            evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
-                            evt.message().equals(event.message()) &&
-                            evt.level() == event.level()
-                    )
-                );
+                "Log events should match in descending order.",
+                event,
+                new Satisfies<>(
+                    evt -> evt.author().equals(DbLogTest.AUTHOR) &&
+                        evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
+                        evt.message().equals(message) &&
+                        evt.level() == level
+                )
+            );
 		}
     }
 }
