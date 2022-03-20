@@ -158,6 +158,11 @@ SOFTWARE.
       <artifactId>jooq-codegen</artifactId>
       <version>${jooq.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.baudoliver7</groupId>
+      <artifactId>takes-utils</artifactId>
+      <version>0.3.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
