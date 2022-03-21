@@ -22,6 +22,8 @@ import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import io.surati.gap.commons.utils.time.Period;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -66,14 +68,9 @@ public final class DbPaginedEventLogs implements EventLogs {
 	private final String filter;
 
 	/**
-	 * Start date.
+	 * Period.
 	 */
-	private final LocalDate start;
-
-	/**
-	 * End date.
-	 */
-	private final LocalDate end;
+	private final Period period;
 
 	/**
 	 * Ctor.
@@ -81,20 +78,18 @@ public final class DbPaginedEventLogs implements EventLogs {
 	 * @param nbperpage Number of items per page
 	 * @param page Current page
 	 * @param filter Filter
-	 * @param start Start date, ignored when setting at LocalDate.MIN
-	 * @param end End date, ignored when setting at LocalDate.MAX
+	 * @param period Period
 	 */
 	public DbPaginedEventLogs(
 		final DataSource source, final Long nbperpage, final Long page,
-		final String filter, final LocalDate start, final LocalDate end
+		final String filter, final Period period
 	) {
 		this.source = source;
 		this.ctx = DSL.using(new DefaultConfiguration().set(this.source));
 		this.nbperpage = nbperpage;
 		this.page = page;
 		this.filter = filter;
-		this.start = start;
-		this.end = end;
+		this.period = period;
 	}
 	
 	@Override
@@ -140,17 +135,17 @@ public final class DbPaginedEventLogs implements EventLogs {
 					.or(EVENT_LOG.AUTHOR.like("%" + this.filter + "%"))
 					.or(EVENT_LOG.IP_ADDRESS.like("%" + this.filter + "%"))
 			);
-		if (this.start != LocalDate.MIN) {
+		if (this.period.begin() != LocalDate.MIN) {
 			result = result.and(
 				EVENT_LOG.DATE.greaterThan(
-					LocalDateTime.of(this.start, LocalTime.MIDNIGHT)
+					LocalDateTime.of(this.period.begin(), LocalTime.MIDNIGHT)
 				)
 			);
 		}
-		if (this.end != LocalDate.MAX) {
+		if (this.period.end() != LocalDate.MAX) {
 			result = result.and(
 				EVENT_LOG.DATE.lessThan(
-					LocalDateTime.of(this.end, LocalTime.of(23, 59))
+					LocalDateTime.of(this.period.end(), LocalTime.of(23, 59))
 				)
 			);
 		}
