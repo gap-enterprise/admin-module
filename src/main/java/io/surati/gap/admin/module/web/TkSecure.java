@@ -14,63 +14,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.surati.gap.admin.module.tk;
+package io.surati.gap.admin.module.web;
 
+import io.surati.gap.admin.module.rq.RqUser;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
-import org.takes.facets.auth.Identity;
-import org.takes.facets.auth.RqAuth;
-import org.takes.facets.forward.RsForward;
-import org.takes.rs.RsEmpty;
+
+import javax.sql.DataSource;
 
 /**
- * Take available for anonymous users.
+ * Take that secures a page.
  *
  * <p>The class is immutable and thread-safe.</p>
  *
- * @since 3.0
+ * @since 0.1
  */
+public final class TkSecure implements Take {
 
-public final class TkAnonymous implements Take {
-	
-    /**
+	/**
      * Original take.
      */
     private final Take origin;
 
     /**
-     * Location where to forward.
+     * DataSource.
      */
-    private final String loc;
-
+    private final DataSource source;
+    
     /**
      * Ctor.
      * @param take Original
+     * @param source DataSource
      */
-    public TkAnonymous(final Take take) {
-        this(take, "/home");
-    }
-
-    /**
-     * Ctor.
-     * @param take Original
-     * @param location Where to forward
-     */
-    public TkAnonymous(final Take take, final String location) {
+    public TkSecure(final Take take, final DataSource source) {
         this.origin = take;
-        this.loc = location;
+        this.source = source;
     }
 
     @Override
     public Response act(final Request request) throws Exception {
-        if (!new RqAuth(request).identity().equals(Identity.ANONYMOUS)) {
-            throw new RsForward(
-                new RsEmpty(),
-                this.loc
-            );
-        }
-        return this.origin.act(request);
+    	new RqUser(this.source, request);
+		return this.origin.act(request);
     }
 
 }

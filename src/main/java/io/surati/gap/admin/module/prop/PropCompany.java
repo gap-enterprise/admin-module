@@ -15,7 +15,10 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.prop;
-
+/**
+ * PropCompany
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Company;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FilenameUtils;

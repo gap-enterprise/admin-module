@@ -82,5 +82,9 @@ public interface Users {
 	 */
 	void remove(Long id);
 
+	/**
+	 * Get total number of users.
+	 * @return Number
+	 */
 	Long count();
 }

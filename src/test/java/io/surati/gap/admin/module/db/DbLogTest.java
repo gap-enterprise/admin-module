@@ -16,22 +16,27 @@
  */
 package io.surati.gap.admin.module.db;
 
-import com.lightweight.db.EmbeddedPostgreSQLDataSource;
-import com.lightweight.db.LiquibaseDataSource;
+import io.surati.gap.admin.module.DataSourceParameterResolver;
+import io.surati.gap.admin.module.DataSourceExtension;
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.admin.module.api.EventLogs;
 import io.surati.gap.admin.module.api.Log;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import javax.sql.DataSource;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.llorllale.cactoos.matchers.Satisfies;
 
+/**
+ * Test case for {@link DbLog}.
+ *
+ * @since 0.1
+ */
+@ExtendWith(DataSourceExtension.class)
+@ExtendWith(DataSourceParameterResolver.class)
 final class DbLogTest {
 
     /**
@@ -55,11 +60,7 @@ final class DbLogTest {
     private EventLogs events;
 
     @BeforeEach
-    void setup() {
-    	final DataSource source = new LiquibaseDataSource(
-            new EmbeddedPostgreSQLDataSource(),
-            "liquibase/db-admin.changelog-master.xml"
-        );
+    void setup(final DataSource source) {
     	this.log = new DbLog(
             source,
             DbLogTest.AUTHOR,
@@ -68,7 +69,7 @@ final class DbLogTest {
     	this.events = new DbEventLogs(source);
     }
 
-    @Test
+    @TestTemplate
     void addInfoEvent() {
         final String message = "I'm connected.";
         this.log.info(message);
@@ -82,14 +83,14 @@ final class DbLogTest {
             )
         );
     }
-    
-    @Test
+
+    @TestTemplate
     void addErrorEvent() {
         final String message = "HTTP Error 500";
         final String details = "HTTP Error 500 (Internal Server Error).";
-        log.error(message, details);
+        this.log.error(message, details);
         MatcherAssert.assertThat(
-            events.get(1L),
+            this.events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -99,13 +100,13 @@ final class DbLogTest {
             )
         );
     }
-    
-    @Test
+
+    @TestTemplate
     void addWarningEvent() {
         final String message = "Ouh! The username is invalid.";
-        log.warning(message);
+        this.log.warning(message);
         MatcherAssert.assertThat(
-            events.get(1L),
+            this.events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -114,20 +115,20 @@ final class DbLogTest {
             )
         );
     }
-    
-    @Test
+
+    @TestTemplate
     void iterate() {
         final String[] messages = { "Welcome admin.", "Something is wrong right now!" };
         final Level[] levels = { Level.INFO, Level.WARNING };
-    	log.info(messages[0]);
-    	log.warning(messages[1]);
+    	this.log.info(messages[0]);
+    	this.log.warning(messages[1]);
         MatcherAssert.assertThat(
             "Log should have two events.",
-            events.count(),
+            this.events.count(),
             new IsEqual<>(Long.valueOf(messages.length))
         );
         int idx = messages.length;
-    	for (final EventLog event : log.iterate()) {
+    	for (final EventLog event : this.log.iterate()) {
             idx -= 1;
             final String message = messages[idx];
             final Level level = levels[idx];

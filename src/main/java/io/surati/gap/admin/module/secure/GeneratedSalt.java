@@ -15,7 +15,10 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.secure;
-
+/**
+ * GeneratedSalt
+ * @since 0.1
+ */
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;

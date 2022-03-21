@@ -120,7 +120,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>5.2.1</version>
+      <version>5.2.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -157,6 +157,26 @@ SOFTWARE.
       <groupId>org.jooq</groupId>
       <artifactId>jooq-codegen</artifactId>
       <version>${jooq.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.baudoliver7</groupId>
+      <artifactId>takes-utils</artifactId>
+      <version>0.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.json</groupId>
+      <artifactId>javax.json-api</artifactId>
+      <version>1.1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>io.surati.gap</groupId>
+      <artifactId>commons-utils</artifactId>
+      <version>0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.surati.gap</groupId>
+      <artifactId>commons-web</artifactId>
+      <version>0.2</version>
     </dependency>
   </dependencies>
   <build>

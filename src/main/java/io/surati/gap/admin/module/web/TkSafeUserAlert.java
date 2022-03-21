@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.surati.gap.admin.module.tk;
+package io.surati.gap.admin.module.web;
 
 import io.surati.gap.admin.module.db.DbLog;
 import org.takes.HttpException;
@@ -27,7 +27,7 @@ import java.net.HttpURLConnection;
 /**
  * Take that safely alert user.
  *
- * @since 3.0
+ * @since 0.1
  */
 public final class TkSafeUserAlert extends TkWrap  {
 

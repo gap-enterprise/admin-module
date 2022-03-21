@@ -15,7 +15,10 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.secure;
-
+/**
+ * Salt
+ * @since 0.1
+ */
 public interface Salt {
 	String value();
 }

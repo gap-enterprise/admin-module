@@ -21,21 +21,20 @@ import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.api.Users;
 import io.surati.gap.admin.module.db.DbUsers;
 import io.surati.gap.admin.module.secure.Salt;
-import org.takes.HttpException;
-import org.takes.Request;
-import org.takes.facets.auth.Identity;
-import org.takes.facets.auth.RqAuth;
-
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Map;
+import org.takes.HttpException;
+import org.takes.Request;
+import org.takes.facets.auth.Identity;
+import org.takes.facets.auth.RqAuth;
 
 /**
  * User of {@link Request}.
  *
- * @since 3.0
+ * @since 0.1
  */
 public final class RqUser implements User {
     

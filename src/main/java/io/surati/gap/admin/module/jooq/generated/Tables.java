@@ -3,7 +3,6 @@
  */
 package io.surati.gap.admin.module.jooq.generated;
 
-
 import io.surati.gap.admin.module.jooq.generated.tables.AccessProfile;
 import io.surati.gap.admin.module.jooq.generated.tables.AppUser;
 import io.surati.gap.admin.module.jooq.generated.tables.EventLog;
@@ -13,6 +12,7 @@ import io.surati.gap.admin.module.jooq.generated.tables.Profile;
 
 /**
  * Convenience access to all tables in public.
+ * @since 0.1
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
