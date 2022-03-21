@@ -26,6 +26,10 @@ import io.surati.gap.admin.module.secure.GeneratedSalt;
 import io.surati.gap.admin.module.secure.Salt;
 import org.apache.commons.lang3.StringUtils;
 import org.cactoos.text.Joined;
+import org.jooq.DSLContext;
+import org.jooq.Record1;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -33,6 +37,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -43,6 +48,26 @@ import java.util.Collection;
  */
 public final class DbUsers implements Users {
 
+	/**
+	 * Table of user.
+	 */
+	private static final io.surati.gap.admin.module.jooq.generated.tables.AppUser APP_USER =
+		io.surati.gap.admin.module.jooq.generated.tables.AppUser.APP_USER;
+
+	/**
+	 * Table of person.
+	 */
+	private static final io.surati.gap.admin.module.jooq.generated.tables.Person PERSON =
+			io.surati.gap.admin.module.jooq.generated.tables.Person.PERSON;
+	
+	/**
+	 * jOOQ database context.
+	 */
+	private final DSLContext ctx;
+	
+	/**
+	 * DataSource source.
+	 */
 	private final DataSource source;
 	
 	/**
@@ -51,6 +76,7 @@ public final class DbUsers implements Users {
 	 */
 	public DbUsers(final DataSource source) {
 		this.source = source;
+		this.ctx = DSL.using(new DefaultConfiguration().set(this.source));
 	}
 	
 	@Override
@@ -93,44 +119,23 @@ public final class DbUsers implements Users {
 	
 	@Override
 	public User get(String login) {
-		
-		try(
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT id FROM app_user WHERE login=?");
-		){
-			pstmt.setString(1, login);
-		
-			try(final ResultSet rs = pstmt.executeQuery()){
-				if(rs.next()) {
-					Long id = rs.getLong(1);
-					return new DbUser(source, id);
-				} else {
-					throw new IllegalArgumentException(String.format("User with login %s not found !", login));
-				}			
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
+		if(this.ctx.fetchCount(APP_USER) == 0) {
+			throw new IllegalArgumentException(
+				String.format("User with login %s not found !", login)
+			);
 		}
+		Long id = this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId();
+		return new DbUser(source, id);
 	}
 
 	@Override
 	public User get(Long id) {
-		try(
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM app_user WHERE id=?");
-		){
-			pstmt.setLong(1, id);
-		
-			try(final ResultSet rs = pstmt.executeQuery()){
-				if(rs.next()) {
-					return new DbUser(source, id);
-				} else {
-					throw new IllegalArgumentException(String.format("User with ID %s not found !", id));
-				}			
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
+		if (this.ctx.fetchCount(APP_USER) == 0) {
+			throw new IllegalArgumentException(
+				String.format("User with ID %s not found !", id)
+			);
 		}
+		return new DbUser(source, id);
 	}
 
 	@Override
@@ -148,71 +153,47 @@ public final class DbUsers implements Users {
 		if(this.has(login))
 			throw new IllegalArgumentException(String.format("Ce login %s est déjà utilisé !", login));
 		
-		try(
-				final Connection connection = this.source.getConnection();
-				final PreparedStatement pstmt = connection.prepareStatement("INSERT INTO person (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-				final PreparedStatement pstmt1 = connection.prepareStatement("INSERT INTO app_user (id, login, password, salt) VALUES (?, ?, ?, ?)")
-		){			
-			pstmt.setString(1, name);			
-			pstmt.executeUpdate();		
-			final Long id;
-			try (final ResultSet rs = pstmt.getGeneratedKeys()) {
-				rs.next();
-				id = rs.getLong(1);
-			}		
-			pstmt1.setLong(1, id);
-			pstmt1.setString(2, login);
-			final Salt salt = new GeneratedSalt();
-			pstmt1.setString(3, new EncryptedWordImpl(password, salt).value());
-			pstmt1.setString(4, salt.value());
-			pstmt1.executeUpdate();
-			return new DbUser(this.source, id);
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
-		}
+		Long idx = this.ctx.insertInto(PERSON)
+		.set(PERSON.NAME, name)
+		.returning(PERSON.ID)
+		.fetchOne().getValue(PERSON.ID);
+		
+		final Salt salt = new GeneratedSalt();
+		
+		this.ctx.insertInto(APP_USER)
+		.set(APP_USER.ID, idx)
+		.set(APP_USER.LOGIN, login)
+		.set(APP_USER.PASSWORD, password)
+		.set(APP_USER.SALT, new EncryptedWordImpl(password, salt).value())
+		.execute();
+		
+		Long id = this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId();
+		
+		return new DbUser(source, id);
 	}
 
 	@Override
 	public Iterable<User> iterate() {
-		
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT id FROM app_user")
-		){
-			final Collection<User> items = new ArrayList<>();
-			
-			try(final ResultSet rs = pstmt.executeQuery()){
-				while(rs.next()) {
-					items.add(new DbUser(source, rs.getLong(1)));
-				}
-			}
-			
-			return items;
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
-		}
+		return this.ctx
+			.selectFrom(APP_USER)
+			.fetch(
+				rec -> new DbUser(
+					this.source, rec.getId()
+				)
+			);
 	}
 
 	@Override
 	public boolean has(String login) {
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(*) as nb FROM app_user WHERE login=?")
-		){
-			pstmt.setString(1, login);
-		
-			try(final ResultSet rs = pstmt.executeQuery()){
-				rs.next();
-				Long nb = rs.getLong(1);
-				return nb > 0;
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
-		}
+		return this.ctx
+			.fetchCount(
+				APP_USER, 
+				APP_USER.LOGIN.eq(login)
+			) > 0;
 	}
 	
 	@Override
-	public void remove(final Long id) {
+	public void remove(final Long id) {		
 		try {
 			final boolean used = new JdbcSession(this.source)
 	            .sql(
@@ -250,14 +231,9 @@ public final class DbUsers implements Users {
 	
 	@Override
 	public Long count() {
-		try {
-			return
-				new JdbcSession(this.source)
-					.sql("SELECT COUNT(*) FROM app_user")
-					.select(new SingleOutcome<>(Long.class));
-		} catch(SQLException ex) {
-			throw new DatabaseException(ex);
-		}
+		return Long.valueOf(
+			this.ctx.fetchCount(APP_USER)
+		);
 	}
 
 }

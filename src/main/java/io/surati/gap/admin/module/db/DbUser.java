@@ -22,6 +22,7 @@ import com.jcabi.jdbc.SingleOutcome;
 import io.surati.gap.admin.module.api.Profile;
 import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.exceptions.DatabaseException;
+import io.surati.gap.admin.module.jooq.generated.tables.records.AppUserRecord;
 import io.surati.gap.admin.module.secure.ConstantSalt;
 import io.surati.gap.admin.module.secure.EncryptedWordImpl;
 import io.surati.gap.admin.module.secure.GeneratedSalt;
@@ -31,6 +32,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.IOUtils;
 import org.cactoos.text.Joined;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -54,7 +58,23 @@ import java.util.stream.Stream;
  * @since 0.1
  */
 public final class DbUser extends DbAbstractPerson implements User {
+
+	/**
+	 * Table of user.
+	 */
+	private static final io.surati.gap.admin.module.jooq.generated.tables.AppUser APP_USER =
+		io.surati.gap.admin.module.jooq.generated.tables.AppUser.APP_USER;
+
+	/**
+	 * Record.
+	 */
+	private final AppUserRecord record;
 	
+	/**
+	 * jOOQ database context.
+	 */
+	private final DSLContext ctx;
+
 	private static String AVATAR_DEFAULT_LOCATION = "images/avatar.jpg";
 	private static String AVATAR_FOLDER = "images";
 
@@ -84,6 +104,9 @@ public final class DbUser extends DbAbstractPerson implements User {
 	 */
 	public DbUser(final DataSource source, final Long id) {
 		super(source, id);
+		this.ctx = DSL.using(new DefaultConfiguration().set(this.source));
+		this.record = DSL.using(new DefaultConfiguration().set(source))
+				.fetchOne(APP_USER, APP_USER.ID.eq(id));
 	}
 	
 	/**
@@ -92,53 +115,22 @@ public final class DbUser extends DbAbstractPerson implements User {
 	 * @return boolean exits
 	 */
 	private boolean loginIsUsed(String login) {
-		try (
-				final Connection connection = source.getConnection();
-				final PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(*) as nb FROM app_user WHERE login=? AND id <>?")
-			){
-				pstmt.setString(1, login);
-				pstmt.setLong(2, id);
-			
-				try(final ResultSet rs = pstmt.executeQuery()){
-					rs.next();
-					Long nb = rs.getLong(1);
-					return nb > 0;
-				}
-			} catch(SQLException e) {
-				throw new DatabaseException(e);
-			}
+		return this.ctx
+			.fetchCount(
+				APP_USER, 
+				APP_USER.LOGIN.eq(login),
+				APP_USER.ID.notEqual(id)
+			) > 0;
 	}
 	
 	@Override
 	public String login() {
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT login FROM app_user WHERE id=?")
-		){
-			pstmt.setLong(1, id);
-			try (final ResultSet rs = pstmt.executeQuery()) {
-				rs.next();
-				return rs.getString(1);
-			}
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		return this.record.getLogin();
 	}
 
 	@Override
 	public String password() {
-		try (
-				final Connection connection = source.getConnection();
-				final PreparedStatement pstmt = connection.prepareStatement("SELECT password FROM app_user WHERE id=?")
-			){
-			pstmt.setLong(1, id);
-			try (final ResultSet rs = pstmt.executeQuery()) {
-				rs.next();
-				return rs.getString(1);
-			}
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		return this.record.getPassword();
 	}
 
 	@Override
@@ -146,18 +138,14 @@ public final class DbUser extends DbAbstractPerson implements User {
 		if(StringUtils.isBlank(newpwd)) {
 			throw new IllegalArgumentException("New password must be given !");
 		}
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("UPDATE app_user SET password=?, salt=? WHERE id=?")
-		) {
-			final Salt salt = new GeneratedSalt();
-			pstmt.setString(1, new EncryptedWordImpl(newpwd, salt).value());
-			pstmt.setString(2, salt.value());
-			pstmt.setLong(3, id);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		
+		final Salt salt = new GeneratedSalt();
+		
+		this.ctx.update(APP_USER)
+		.set(APP_USER.PASSWORD, new EncryptedWordImpl(newpwd, salt).value())
+		.set(APP_USER.SALT, salt.value())
+		.where(APP_USER.ID.eq(id))
+		.execute();
 	}
 	
 	@Override
@@ -180,32 +168,15 @@ public final class DbUser extends DbAbstractPerson implements User {
 	
 	@Override
 	public boolean blocked() {
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT blocked FROM app_user WHERE id=?")
-		){
-			pstmt.setLong(1, id);
-			try (final ResultSet rs = pstmt.executeQuery()) {
-				rs.next();
-				return rs.getBoolean(1);
-			}
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		return this.record.getBlocked();
 	}
 	
 	@Override
 	public void block(boolean enable) {
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("UPDATE app_user SET blocked=? WHERE id=?")
-		) {
-			pstmt.setBoolean(1, enable);
-			pstmt.setLong(2, id);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		this.ctx.update(APP_USER)
+		.set(APP_USER.BLOCKED, enable)
+		.where(APP_USER.ID.eq(id))
+		.execute();
 	}
 	
 	@Override
@@ -220,72 +191,40 @@ public final class DbUser extends DbAbstractPerson implements User {
 		if(this.loginIsUsed(login))
 			throw new IllegalArgumentException("Ce login est déjà utilisé.");
 			
-		try (
-			final Connection connection = source.getConnection();			
-			final PreparedStatement pstmt = connection.prepareStatement("UPDATE app_user SET login=? WHERE id=?")
-		) {
-			super.update(name);
-			pstmt.setString(1, login);
-			pstmt.setLong(2, id);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		super.update(name);
+		
+		this.ctx.update(APP_USER)
+		.set(APP_USER.LOGIN, login)
+		.where(APP_USER.ID.eq(id))
+		.execute();
 	}
 
 	@Override
 	public Profile profile() {
-		try(
-				final Connection connection = source.getConnection();
-				final PreparedStatement pstmt = connection.prepareStatement("SELECT profile_id FROM app_user WHERE id=?");
-			){
-				pstmt.setLong(1, id);
-			
-				try(final ResultSet rs = pstmt.executeQuery()){
-					if(rs.next()) {
-						Long id = rs.getLong(1);
-						return new DbProfile(source, id);
-					} else {
-						throw new IllegalArgumentException(String.format("L'utilisateur avec l'ID %s n'existe pas !", id));
-					}			
-				}
-			} catch(SQLException e) {
-				throw new DatabaseException(e);
-			}
+		if (this.record.getProfileId() == 0) {
+			throw new IllegalArgumentException(
+				String.format("L'utilisateur avec l'ID %s n'existe pas !", id)
+			);
+		}
+		Long id = this.record.getId();
+		return new DbProfile(source, id);
 	}
 
 	@Override
 	public void assign(Profile profile) {		
-		try (
-			final Connection connection = source.getConnection();
-				
-			final PreparedStatement pstmt = connection.prepareStatement("UPDATE app_user SET profile_id=? WHERE id=?")
-		) {
-			pstmt.setLong(1, profile.id());
-			pstmt.setLong(2, id);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DatabaseException(e);
-		}
+		this.ctx.update(APP_USER)
+		.set(APP_USER.PROFILE_ID, profile.id())
+		.where(APP_USER.ID.eq(id))
+		.execute();
 	}
 
 	@Override
 	public Salt salt() {
-		try {
-			return new ConstantSalt(
-				new JdbcSession(this.source)
-					.sql(
-		        		new Joined(
-	        				" ",
-	        				"SELECT salt FROM app_user",
-	        				"WHERE id=?"
-	        			).toString()
-	        		)
-					.set(this.id)
-		            .select(new SingleOutcome<>(String.class)));
-		} catch (SQLException ex) {
-			throw new DatabaseException(ex);
-		}
+		return new ConstantSalt(
+			this.ctx.select(APP_USER.SALT)
+			.from(APP_USER)
+			.where(APP_USER.ID.eq(id)).toString()
+		);
 	}
 
 	@Override
