@@ -88,9 +88,9 @@ final class DbLogTest {
     void addErrorEvent() {
         final String message = "HTTP Error 500";
         final String details = "HTTP Error 500 (Internal Server Error).";
-        log.error(message, details);
+        this.log.error(message, details);
         MatcherAssert.assertThat(
-            events.get(1L),
+            this.events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -104,9 +104,9 @@ final class DbLogTest {
     @TestTemplate
     void addWarningEvent() {
         final String message = "Ouh! The username is invalid.";
-        log.warning(message);
+        this.log.warning(message);
         MatcherAssert.assertThat(
-            events.get(1L),
+            this.events.get(1L),
             new Satisfies<>(
                 evt -> evt.author().equals(DbLogTest.AUTHOR) &&
                     evt.ipAddress().equals(DbLogTest.IP_ADDRESS) &&
@@ -120,15 +120,15 @@ final class DbLogTest {
     void iterate() {
         final String[] messages = { "Welcome admin.", "Something is wrong right now!" };
         final Level[] levels = { Level.INFO, Level.WARNING };
-    	log.info(messages[0]);
-    	log.warning(messages[1]);
+    	this.log.info(messages[0]);
+    	this.log.warning(messages[1]);
         MatcherAssert.assertThat(
             "Log should have two events.",
-            events.count(),
+            this.events.count(),
             new IsEqual<>(Long.valueOf(messages.length))
         );
         int idx = messages.length;
-    	for (final EventLog event : log.iterate()) {
+    	for (final EventLog event : this.log.iterate()) {
             idx -= 1;
             final String message = messages[idx];
             final Level level = levels[idx];

@@ -42,23 +42,23 @@ final class DbUserTest {
 
     @BeforeEach
     void setup(final DataSource source) {
-        user = new DbUsers(source).register(
+        this.user = new DbUsers(source).register(
             "Olivier B. OURA", "baudoliver7", "gap"
         );
     }
 
     @TestTemplate
     void blocksUser() {
-        user.block(true);
+        this.user.block(true);
         MatcherAssert.assertThat(
             "User should be blocked.",
-            user.blocked(),
+            this.user.blocked(),
             Matchers.is(true)
         );
-        user.block(false);
+        this.user.block(false);
         MatcherAssert.assertThat(
             "User should be unblocked.",
-            user.blocked(),
+            this.user.blocked(),
             Matchers.is(false)
         );
     }
