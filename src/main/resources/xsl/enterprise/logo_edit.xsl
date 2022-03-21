@@ -1,4 +1,20 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2022 Surati
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to read
+the Software only. Permissions is hereby NOT GRANTED to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
   <xsl:output method="html" include-content-type="no" doctype-system="about:legacy-compat" encoding="UTF-8" indent="yes"/>
   <xsl:include href="/xsl/layout.xsl"/>
@@ -12,11 +28,11 @@
       <div class="page-title-wrapper">
         <div class="page-title-heading">
           <div class="page-title-icon">
-           <i class="lnr-apartment icon-gradient bg-sunny-morning"/>
+            <i class="lnr-apartment icon-gradient bg-sunny-morning"/>
           </div>
           <div>
             <xsl:text>Configurer logo</xsl:text>
-          		<div class="page-title-subheading opacity-10">
+            <div class="page-title-subheading opacity-10">
               <nav class="" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item">
@@ -46,8 +62,8 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label">Image à charger (Format de préférence : 360 x 360)<span style="color: red">*</span></label>                       
-                  <input type="file" id="logo" name="logo" class="form-control" accept="image/*" aria-describedby="logo" required=""/>	
+                  <label class="form-label">Image à charger (Format de préférence : 360 x 360)<span style="color: red">*</span></label>
+                  <input type="file" id="logo" name="logo" class="form-control" accept="image/*" aria-describedby="logo" required=""/>
                 </div>
               </div>
             </div>
@@ -58,7 +74,8 @@
                 <i class="fa fa-check"/>
               </button>
               <button type="button" class="btn-shadow float-right btn-wide btn-pill mr-1 btn btn-outline-secondary" onclick="location.href='/enterprise'">
-                <xsl:text>Annuler </xsl:text><i class="fa fa-undo"/>
+                <xsl:text>Annuler </xsl:text>
+                <i class="fa fa-undo"/>
               </button>
             </div>
           </form>
