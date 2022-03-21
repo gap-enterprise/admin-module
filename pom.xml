@@ -178,6 +178,11 @@ SOFTWARE.
       <artifactId>commons-web</artifactId>
       <version>0.2</version>
     </dependency>
+    <dependency>
+      <groupId>io.surati.gap</groupId>
+      <artifactId>web-base</artifactId>
+      <version>0.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
