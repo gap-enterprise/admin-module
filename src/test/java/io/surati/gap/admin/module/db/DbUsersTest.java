@@ -22,9 +22,14 @@ import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.llorllale.cactoos.matchers.Satisfies;
 import com.lightweight.db.EmbeddedPostgreSQLDataSource;
 import com.lightweight.db.LiquibaseDataSource;
+
+import io.surati.gap.admin.module.DataSourceExtension;
+import io.surati.gap.admin.module.DataSourceParameterResolver;
 import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.api.Users;
 
@@ -33,6 +38,8 @@ import io.surati.gap.admin.module.api.Users;
  *
  * @since 0.1
  */
+@ExtendWith(DataSourceExtension.class)
+@ExtendWith(DataSourceParameterResolver.class)
 final class DbUsersTest {
 
     /**
@@ -55,7 +62,7 @@ final class DbUsersTest {
     	this.admin = this.users.register("Administrateur", "admin", "@dminP@ss");
     }
 	
-	@Test
+	@TestTemplate
 	void registersAnUser() {
 		final String name = "Marx Brou";
 		final String login = "brou87";
@@ -69,7 +76,7 @@ final class DbUsersTest {
 		);
 	}
 	
-	@Test
+	@TestTemplate
 	public void checksUserExistenceByItsLogin() {
 		MatcherAssert.assertThat(
 			this.users.has(this.admin.login()),
@@ -77,7 +84,7 @@ final class DbUsersTest {
 		);
 	}
 	
-	@Test
+	@TestTemplate
 	public void getsUserById() {
 		final User user = this.users.get(this.admin.id());
 		MatcherAssert.assertThat(
@@ -90,7 +97,7 @@ final class DbUsersTest {
 		);
 	}
 	
-	@Test
+	@TestTemplate
 	void countsTotalNumberOfUsers() {
 		this.users.register("Mentor", "mentor", "mentorpwd");
 		this.users.register("Guest", "guest", "guestpwd");
@@ -100,7 +107,7 @@ final class DbUsersTest {
         );
 	}
 	
-	@Test 
+	@TestTemplate
 	void authenticatesUserWithNonEncryptedPassword() {
 		MatcherAssert.assertThat(
 			this.users.authenticate("admin", "@dminP@ss"),
@@ -108,7 +115,7 @@ final class DbUsersTest {
 		);
 	}
 	
-	@Test
+	@TestTemplate
 	void authenticatesUserWithEncryptedPassword() {
 		MatcherAssert.assertThat(
 			users.authenticatePwdEncrypted(
@@ -119,7 +126,7 @@ final class DbUsersTest {
 		);
 	}
 	
-    @Test
+	@TestTemplate
     void iterate() {
     	final String[] names = {"Administrateur", "Mentor", "Guest"};
 		final String[] logins = {"admin", "mentor", "guest"};
