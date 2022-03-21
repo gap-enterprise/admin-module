@@ -1,4 +1,20 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2022 Surati
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to read
+the Software only. Permissions is hereby NOT GRANTED to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sec="http://www.surati.io/Security/User/Profile" version="2.0">
   <xsl:output method="html" include-content-type="no" doctype-system="about:legacy-compat" encoding="UTF-8" indent="yes"/>
   <xsl:include href="/xsl/layout.xsl"/>
@@ -76,7 +92,7 @@
               <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-bold">
                   <i class="header-icon lnr-book icon-gradient bg-malibu-beach"> </i>
-                  <xsl:text>Informations g&#xE9;n&#xE9;rales</xsl:text>
+                  <xsl:text>Informations générales</xsl:text>
                 </div>
               </div>
             </div>
@@ -88,7 +104,7 @@
                       <div class="widget-content-wrapper">
                         <div class="widget-content-left">
                           <div class="widget-heading">
-                            <xsl:text>Intitul&#xE9;</xsl:text>
+                            <xsl:text>Intitulé</xsl:text>
                           </div>
                           <div class="widget-subheading">
                             <xsl:value-of select="name"/>
@@ -108,7 +124,7 @@
                       <div class="widget-content-wrapper">
                         <div class="widget-content-left">
                           <div class="widget-heading">
-                            <xsl:text>Abr&#xE9;g&#xE9;</xsl:text>
+                            <xsl:text>Abrégé</xsl:text>
                           </div>
                           <div class="widget-subheading">
                             <xsl:value-of select="abbreviated"/>
@@ -156,7 +172,7 @@
                       <div class="widget-content-wrapper">
                         <div class="widget-content-left">
                           <div class="widget-heading">
-                            <xsl:text>Si&#xE8;ge social</xsl:text>
+                            <xsl:text>Siège social</xsl:text>
                           </div>
                           <div class="widget-subheading">
                             <xsl:value-of select="headquarters"/>
@@ -322,7 +338,7 @@
               <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-bold">
                   <i class="header-icon lnr-user icon-gradient bg-love-kiss"> </i>
-                  <xsl:text>Repr&#xE9;sentant</xsl:text>
+                  <xsl:text>Représentant</xsl:text>
                 </div>
               </div>
             </div>
@@ -374,7 +390,7 @@
                       <div class="widget-content-wrapper">
                         <div class="widget-content-left">
                           <div class="widget-heading">
-                            <xsl:text>Civilit&#xE9;</xsl:text>
+                            <xsl:text>Civilité</xsl:text>
                           </div>
                           <div class="widget-subheading">
                             <xsl:value-of select="representative_civility"/>
@@ -390,7 +406,7 @@
               <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-bold">
                   <i class="header-icon lnr-database icon-gradient bg-grow-early"> </i>
-                  <xsl:text>Exportation des donn&#xE9;es</xsl:text>
+                  <xsl:text>Exportation des données</xsl:text>
                 </div>
               </div>
             </div>
@@ -414,12 +430,11 @@
                 </li>
               </ul>
             </div>
-
             <div class="col-md-12 col-lg-12">
               <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-bold">
                   <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>
-                  <xsl:text>Type document de r&#xE9;f&#xE9;rence</xsl:text>
+                  <xsl:text>Type document de référence</xsl:text>
                 </div>
               </div>
             </div>
@@ -431,7 +446,7 @@
                       <div class="widget-content-wrapper">
                         <div class="widget-content-left">
                           <div class="widget-heading">
-                            <xsl:text>Type document de r&#xE9;f&#xE9;rence par d&#xE9;faut</xsl:text>
+                            <xsl:text>Type document de référence par défaut</xsl:text>
                           </div>
                           <div class="widget-subheading">
                             <xsl:value-of select="default_reference_document_type/name"/>
