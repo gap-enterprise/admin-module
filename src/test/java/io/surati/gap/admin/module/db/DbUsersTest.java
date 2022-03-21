@@ -16,22 +16,20 @@
  */
 package io.surati.gap.admin.module.db;
 
+import io.surati.gap.admin.module.DataSourceExtension;
+import io.surati.gap.admin.module.DataSourceParameterResolver;
+import io.surati.gap.admin.module.api.User;
+import io.surati.gap.admin.module.api.Users;
 import javax.sql.DataSource;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.llorllale.cactoos.matchers.Satisfies;
 import com.lightweight.db.EmbeddedPostgreSQLDataSource;
 import com.lightweight.db.LiquibaseDataSource;
-
-import io.surati.gap.admin.module.DataSourceExtension;
-import io.surati.gap.admin.module.DataSourceParameterResolver;
-import io.surati.gap.admin.module.api.User;
-import io.surati.gap.admin.module.api.Users;
 
 /**
  * Test case for {@link DbUsers}.
@@ -59,7 +57,7 @@ final class DbUsersTest {
             "liquibase/db-admin.changelog-master.xml"
         );
     	this.users = new DbUsers(source);
-    	this.admin = this.users.register("Administrateur", "admin", "@dminP@ss");
+    	this.admin = new DbUser(source, 1L);
     }
 	
 	@TestTemplate
@@ -110,7 +108,7 @@ final class DbUsersTest {
 	@TestTemplate
 	void authenticatesUserWithNonEncryptedPassword() {
 		MatcherAssert.assertThat(
-			this.users.authenticate("admin", "@dminP@ss"),
+			this.users.authenticate(this.admin.login(), "admin"),
 			Matchers.is(true)
 		);
 	}
