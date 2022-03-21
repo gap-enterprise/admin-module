@@ -69,7 +69,7 @@ public final class DbUser extends DbAbstractPerson implements User {
 			try (
 				InputStream in = User.class
 					.getClassLoader()
-					.getResourceAsStream("img/avatar.jpg")
+					.getResourceAsStream("io/surati/gap/admin/img/avatar.jpg")
 			) {
 				Files.copy(in, Paths.get(AVATAR_DEFAULT_LOCATION));
 			} catch (IOException ex) {

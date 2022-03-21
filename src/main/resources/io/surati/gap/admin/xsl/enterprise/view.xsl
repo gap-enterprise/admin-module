@@ -17,7 +17,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sec="http://www.surati.io/Security/User/Profile" version="2.0">
   <xsl:output method="html" include-content-type="no" doctype-system="about:legacy-compat" encoding="UTF-8" indent="yes"/>
-  <xsl:include href="/xsl/layout.xsl"/>
+  <xsl:include href="/io/surati/gap/admin/xsl/layout.xsl"/>
   <xsl:template match="page" mode="head">
     <title>
       <xsl:text>GAP - Entreprise</xsl:text>

@@ -15,12 +15,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sec="http://www.surati.io/Security/User/Profile" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
   <xsl:output method="html" include-content-type="no" doctype-system="about:legacy-compat" encoding="UTF-8" indent="yes"/>
-  <xsl:include href="/xsl/layout.xsl"/>
+  <xsl:include href="/io/surati/gap/admin/xsl/layout.xsl"/>
   <xsl:template match="page" mode="head">
     <title>
-      <xsl:text>GAP - Utilisateurs</xsl:text>
+      <xsl:text>GAP - Journalisation</xsl:text>
     </title>
   </xsl:template>
   <xsl:template match="page" mode="header">
@@ -28,12 +28,23 @@ SOFTWARE.
       <div class="page-title-wrapper">
         <div class="page-title-heading">
           <div class="page-title-icon">
-            <i class="lnr-users icon-gradient bg-night-fade"/>
+            <i class="lnr-layers icon-gradient bg-night-fade"/>
           </div>
           <div>
-            <xsl:text>Utilisateurs</xsl:text>
-            <div class="page-title-subheading">
-              <xsl:text>Gérer les utilisateurs</xsl:text>
+            <xsl:text>Journalisation</xsl:text>
+            <div class="page-title-subheading opacity-10">
+              <nav class="" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="/home">
+                      <i aria-hidden="true" class="fa fa-home"/>
+                    </a>
+                  </li>
+                  <li class="active breadcrumb-item">
+                    Journalisation
+                  </li>
+                </ol>
+              </nav>
             </div>
           </div>
         </div>
@@ -44,19 +55,11 @@ SOFTWARE.
     <div class="main-card mb-3 card card-body" app="app" ng-controller="AppCtrl as vm">
       <div class="card-header">
         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-          <xsl:text>Liste des Utilisateurs</xsl:text>
+          <xsl:text>Journalisation</xsl:text>
         </div>
-        <xsl:if test="sec:hasAccess(.,'CONFIGURER_UTILISATEURS')">
-          <div class="btn-actions-pane-right">
-            <xsl:apply-templates select="user"/>
-            <a href="/user/edit" type="button" class="btn-icon btn-wide btn-outline-2x btn btn-outline-focus btn-sm d-flex">
-              <xsl:text>Nouveau</xsl:text>
-              <span class="pl-2 align-middle opacity-7">
-                <i class="fa fa-plus"/>
-              </span>
-            </a>
-          </div>
-        </xsl:if>
+        <div class="btn-actions-pane-right">
+          <xsl:apply-templates select="event_log"/>
+        </div>
       </div>
       <div class="card-body">
         <div class="row dataTables_wrapper dt-bootstrap4">
@@ -69,11 +72,37 @@ SOFTWARE.
           </div>
           <div class="col-sm-12 col-md-9">
             <div class="input-group input-group-sm">
-              <input type="search" class="form-control form-control-sm" placeholder="Saisir Nom, Login, Profil" aria-controls="example" ng-model="vm.filter" ng-model-options="{{ debounce: 1000 }}" ng-change="vm.filterChanged(vm.filter)" aria-describedby="search-addon"/>
+              <input type="search" class="form-control form-control-sm" placeholder="Saisir Auteur, Message, Adresse IP, Statut" aria-controls="example" ng-model="vm.filter" ng-model-options="{{ debounce: 1000 }}" ng-change="vm.filterChanged(vm.filter)" aria-describedby="search-addon"/>
               <div class="input-group-append">
                 <span class="input-group-text" id="search-addon">
                   <i class="fa fa-search"/>
                 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-5">
+            <div class="d-flex align-items-center">
+              <label class="col-md-4">Date début:</label>
+              <div class="col-md-8 input-group input-group-sm">
+                <input type="date" class="form-control" placeholder="" aria-controls="example" ng-model="vm.begindate" ng-blur="vm.search()"/>
+                <div class="input-group-append">
+                  <button ng-click="vm.begindate=''; vm.search()" class="btn btn-outline-secondary" type="button">X</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-5 mt-1">
+            <div class="d-flex align-items-center">
+              <label class="col-md-4">Date fin:</label>
+              <div class="col-md-8 input-group input-group-sm">
+                <input type="date" class="form-control" placeholder="" aria-controls="example" ng-model="vm.enddate" ng-blur="vm.search()"/>
+                <div class="input-group-append">
+                  <button ng-click="vm.enddate=''; vm.search()" class="btn btn-outline-secondary" type="button">X</button>
+                </div>
               </div>
             </div>
           </div>
@@ -85,8 +114,8 @@ SOFTWARE.
           </div>
         </div>
         <div ng-if="!vm.loadingData">
-          <h6 class="text-center pb-1 pt-1" ng-if="vm.items.length == 0">
-            <xsl:text>Il n'y a aucun utilisateur trouvé.</xsl:text>
+          <h6 class="text-center pb-1 pt-5" ng-if="vm.items.length == 0">
+            <xsl:text>Il n'y a aucun évènement trouvé.</xsl:text>
           </h6>
           <div class="row" ng-if="vm.items.length &gt; 0">
             <div class="col-sm-12 col-md-12">
@@ -95,9 +124,10 @@ SOFTWARE.
                   <thead>
                     <tr>
                       <th>N°</th>
-                      <th>Nom</th>
-                      <th>Login</th>
-                      <th>Profil</th>
+                      <th>Date</th>
+                      <th>Message</th>
+                      <th>Auteur</th>
+                      <th>Statut</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -107,30 +137,25 @@ SOFTWARE.
 			                    {{ vm.firstPosition + $index }}
 			                  </td>
                       <td>
-			                    {{ item.name }}
+			                    {{ item.date }}
 			                  </td>
                       <td>
-			                    {{ item.login }}
+			                    {{ item.message }}
 			                  </td>
                       <td>
-			                    {{ item.profile }}
+			                    {{ item.author }}
 			                  </td>
+                      <td>
+                        <div class="mb-2 mr-2 badge badge-success" ng-if="item.level_id == 'FINE'">{{ item.level_id }}</div>
+                        <div class="mb-2 mr-2 badge badge-warning" ng-if="item.level_id == 'WARNING'">{{ item.level_id }}</div>
+                        <div class="mb-2 mr-2 badge badge-danger" ng-if="item.level_id == 'SEVERE'">{{ item.level_id }}</div>
+                        <div class="mb-2 mr-2 badge badge-info" ng-if="item.level_id == 'INFO'">{{ item.level_id }}</div>
+                      </td>
                       <td>
                         <div role="group">
-                          <a href="/user/view?id={{{{item.id}}}}" class="mb-1 mr-1 btn btn-xs btn-outline-primary">
+                          <a href="/event-log/view?id={{{{item.id}}}}" class="mb-1 mr-1 btn btn-xs btn-outline-primary">
                             <i class="fa fa-eye"/>
                           </a>
-                          <a href="/user/admin/avatar/edit?id={{{{item.id}}}}" class="mb-1 mr-1 btn btn-xs btn-outline-warning">
-                            <i class="fa fa-image"/>
-                          </a>
-                          <xsl:if test="sec:hasAccess(.,'CONFIGURER_UTILISATEURS')">
-                            <a href="/user/edit?id={{{{item.id}}}}" class="mb-1 mr-1 btn btn-xs btn-outline-success">
-                              <i class="fa fa-edit"/>
-                            </a>
-                            <a href="/user/delete?id={{{{item.id}}}}" class="mb-1 mr-1 btn btn-xs btn-outline-danger" onclick="return confirm('Voulez-vous supprimer cet utilisateur ?');">
-                              <i class="fa fa-trash"/>
-                            </a>
-                          </xsl:if>
                         </div>
                       </td>
                     </tr>
@@ -178,12 +203,14 @@ SOFTWARE.
 				                params: {
 				                    page: vm.currentPage,
 				                    nbperpage: vm.nbItemsPerPage,
-				                    filter: vm.filter
+				                    filter: vm.filter,
+				                    begindate: vm.begindate,
+				                    enddate: vm.enddate
 				                }
 				            };
 				
 				            vm.loadingData = true;
-				            return $http.get('/user/search', config).then(
+				            return $http.get('/event-log/search', config).then(
 						            function(response){
 						            	vm.loadingData = false;
 						            	
@@ -202,12 +229,10 @@ SOFTWARE.
 		               		vm.search();
 		               };		             		              
 		               
-					   this.$onInit = function(){
-					   					   	    
+					   this.$onInit = function(){					   					   	    
 					   	    vm.nbItemsPerPage = 10;
-					   	    vm.pageSize = 5;
 					   	    vm.currentPage = 1;
-					   	    
+					   	    vm.pageSize = 5;
 					   	    vm.search();
 					   };
 			    }]);	
