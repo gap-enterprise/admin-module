@@ -1,5 +1,9 @@
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * XeEventLog
+ * @since 0.1
+ */
 import com.minlessika.map.CleanMap;
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.commons.utils.convert.FrShortDateFormat;

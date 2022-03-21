@@ -1,5 +1,9 @@
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * XeAccess
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Access;
 import org.takes.rs.xe.XeDirectives;
 import org.takes.rs.xe.XeWrap;

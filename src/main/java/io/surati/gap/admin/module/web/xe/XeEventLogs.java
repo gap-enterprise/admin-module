@@ -1,5 +1,9 @@
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * XeEventLogs
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.admin.module.api.EventLogs;
 import org.cactoos.iterable.Joined;

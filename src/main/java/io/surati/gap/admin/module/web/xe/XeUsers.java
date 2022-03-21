@@ -23,6 +23,10 @@ SOFTWARE.
  */
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * Xml Users
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.api.Users;
 import org.cactoos.iterable.Joined;

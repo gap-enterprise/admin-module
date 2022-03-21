@@ -23,6 +23,10 @@ SOFTWARE.
  */
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * Xml user
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.User;
 import org.takes.rs.xe.XeDirectives;
 import org.takes.rs.xe.XeWrap;

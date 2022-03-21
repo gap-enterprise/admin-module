@@ -1,5 +1,12 @@
 package io.surati.gap.admin.module.web.pages;
 
+/**
+ * Take that edits an user avatar.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.db.DbUsers;
 import io.surati.gap.admin.module.web.server.RsPage;

@@ -37,7 +37,7 @@ import java.util.Collection;
 /**
  * Profiles in Database.
  * 
- * @since 3.0
+ * @since 0.1
  */
 public final class DbProfiles implements Profiles {
 

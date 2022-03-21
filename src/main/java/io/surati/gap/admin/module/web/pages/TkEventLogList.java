@@ -1,5 +1,12 @@
 package io.surati.gap.admin.module.web.pages;
 
+/**
+ * Take that lists all event log.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.web.server.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;

@@ -16,6 +16,11 @@
  */
 package io.surati.gap.admin.module.codec;
 
+/**
+ * SCodec
+ *
+ * @since 0.1
+ */
 import org.takes.facets.auth.Identity;
 import org.takes.facets.auth.codecs.CcBase64;
 import org.takes.facets.auth.codecs.CcCompact;

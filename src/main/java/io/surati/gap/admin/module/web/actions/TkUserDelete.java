@@ -42,7 +42,7 @@ import org.takes.rq.RqHref;
  *
  * <p>The class is immutable and thread-safe.</p>
  *
- * @since 0.1.0
+ * @since 0.1
  */
 
 public final class TkUserDelete implements Take  {

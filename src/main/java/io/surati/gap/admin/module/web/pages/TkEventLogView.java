@@ -1,5 +1,12 @@
 package io.surati.gap.admin.module.web.pages;
 
+/**
+ * Take that view an event log.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.admin.module.db.DbEventLogs;
 import io.surati.gap.admin.module.web.server.RsPage;

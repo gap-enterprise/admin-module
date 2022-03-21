@@ -27,7 +27,7 @@ import java.net.HttpURLConnection;
 /**
  * Take that safely alert user.
  *
- * @since 3.0
+ * @since 0.1
  */
 public final class TkSafeUserAlert extends TkWrap  {
 

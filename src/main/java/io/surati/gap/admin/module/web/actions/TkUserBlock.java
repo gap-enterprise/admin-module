@@ -40,6 +40,8 @@ import java.util.logging.Level;
  * Take that block or unblock an user.
  *
  * <p>The class is immutable and thread-safe.</p>
+ * 
+ * @since 0.1
  */
 public final class TkUserBlock implements Take {
 	

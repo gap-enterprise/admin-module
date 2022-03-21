@@ -15,7 +15,10 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.secure;
-
+/**
+ * EncryptedWord
+ * @since 0.1
+ */
 public interface EncryptedWord {
 	String value();
 }
