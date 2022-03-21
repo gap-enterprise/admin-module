@@ -79,6 +79,11 @@ import java.util.regex.Pattern;
  * Entry of application.
  * 
  * @since 0.1
+ * @todo #29:30min bump web-base to version 0.2
+ * We noticed that location folder must be unique for each project for
+ * if there are two same locations, one will override the other. So in
+ * version 0.2, we expect resources files to be relocate in a unique
+ * folder.
  */
 public final class Main {
 
