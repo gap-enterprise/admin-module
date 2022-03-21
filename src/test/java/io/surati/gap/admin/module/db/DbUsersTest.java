@@ -27,6 +27,8 @@ import com.lightweight.db.EmbeddedPostgreSQLDataSource;
 import com.lightweight.db.LiquibaseDataSource;
 import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.api.Users;
+import io.surati.gap.admin.module.secure.EncryptedWordImpl;
+import io.surati.gap.admin.module.secure.GeneratedSalt;
 
 final class DbUsersTest {
 
@@ -34,6 +36,11 @@ final class DbUsersTest {
      * Users users.
      */
     private Users users;
+    
+    /**
+     * User user.
+     */
+    private User user;
 	
 	@BeforeEach
     void setup() {
@@ -42,130 +49,92 @@ final class DbUsersTest {
             "liquibase/db-admin.changelog-master.xml"
         );
     	this.users = new DbUsers(source);
+    	this.user = this.users.register("Administrateur", "admin", "admin");
     }
 	
 	@Test
 	void register() {
-		final String name = "Administrateur";
-		final String login = "admin-gap";
-		final String password = "gap2022";
-		final User user = users.register(name, login, password);
 		MatcherAssert.assertThat(
-			users.get(1L),
+			this.users.get(1L),
 			new Satisfies<>(
-					usr -> usr.name().equals(user.name()) &&
-						   usr.login().equals(user.login()) &&
-						   usr.password().equals(user.password())
+				usr -> usr.name().equals(this.user.name()) &&
+					   usr.login().equals(this.user.login()) &&
+					   usr.password().equals(this.user.password())
 			)
 		);
 	}
 	
 	@Test
-	public void hasUserByItsLogin() {
-		final String name = "Administrateur";
-		final String login = "admin-gap";
-		final String password = "gap2022";
-		users.register(name, login, password);
+	public void checksUserExistenceByItsLogin() {
 		MatcherAssert.assertThat(
-			users.has("admin-gap"),
+			this.users.has(this.user.login()),
 			Matchers.is(true)
 		);
+	}
+	
+	@Test
+	public void getsUserById() {
+		final User currentuser = this.users.get(this.user.id());
 		MatcherAssert.assertThat(
-			users.has("brou87"),
-			Matchers.is(false)
+			currentuser,
+			new Satisfies<>(
+				usr -> usr.id().equals(this.user.id()) &&
+					   usr.login().equals(this.user.login())
+			)
 		);
 	}
 	
 	@Test
-	public void hasUserByItsId() {
-		final String name = "Administrateur";
-		final String login = "admin-gap";
-		final String password = "gap2022";
-		users.register(name, login, password);
+	void countsTotalNumberOfUsers() {
+		this.users.register("Mentor", "mentor", "gap2022");
+		this.users.register("Guest", "guest", "gap2022");
 		MatcherAssert.assertThat(
-			users.get(login).id(),
-			Matchers.equalTo(1L)
-		);
-	}
-	
-	@Test
-	void countTotalNumberOfUsers() {
-		final String[] names = { "Mentor", "Guest" };
-		final String[] logins = { "mentor", "guest" };
-		final String password = "gap2022";
-		users.register(names[0], logins[0], password);
-		users.register(names[1], logins[1], password);
-		MatcherAssert.assertThat(
-            "Application should have two registrations.",
-            users.count(),
-            new IsEqual<>(Long.valueOf(logins.length))
+            this.users.count(),
+            Matchers.equalTo(3L)
         );
 	}
 	
-	@Test
-	void authenticateUserWithNonEncryptedPassword() {
-		final String name = "Administrateur";
-		final String login = "admin-gap";
-		final String password = "gap2022";
-		users.register(name, login, password);
+	@Test 
+	void authenticatesUserWithNonEncryptedPassword() {
 		MatcherAssert.assertThat(
-			users.authenticate(login, password),
+			this.users.authenticate("admin", "admin"),
 			Matchers.is(true)
 		);
 	}
 	
 	@Test
-	void authenticateUserWithEncryptedPassword() {
-		final String name = "Administrateur";
-		final String login = "admin-gap";
-		final String password = "gap2022";
-		users.register(name, login, password);
+	void authenticatesUserWithEncryptedPassword() {
 		MatcherAssert.assertThat(
-			users.authenticatePwdEncrypted(login, password),
-			Matchers.is(false)
+			users.authenticatePwdEncrypted(this.user.login(), this.user.password()),
+			Matchers.is(true)
 		);
 	}
-	
-	/*@Test
-	void removeUser() {
-		final String name = "Administrateur";
-		final String login = "admin-gap";
-		final String password = "gap2022";
-		users.register(name, login, password);
-		final User user = users.get(login);
-		users.remove(user.id());
-		MatcherAssert.assertThat(
-			user.id(),
-			Matchers.equalTo(0L)
-		);
-	}*/
 	
     @Test
     void iterate() {
-    	final String[] names = { "Mentor", "Guest" };
-		final String[] logins = { "mentor", "guest" };
-		final String password = "gap2022";
-		users.register(names[0], logins[0], password);
-		users.register(names[1], logins[1], password);
+    	final String[] names = {"Administrateur", "Mentor", "Guest"};
+		final String[] logins = {"admin", "mentor", "guest"};
+		final String password = "admin";
+		this.users.register(names[1], logins[1], password);
+		this.users.register(names[2], logins[2], password);
 		MatcherAssert.assertThat(
             "Application should have two registrations.",
-            users.count(),
-            new IsEqual<>(Long.valueOf(logins.length))
+            this.users.count(),
+            new IsEqual<>(Long.valueOf(3L))
         );
-		int idx = logins.length;
-		for (final User user : users.iterate()) {
-			idx -= 1;
+		int idx = 0;
+		for (final User user : this.users.iterate()) {
+			final String name = names[idx];
 			final String login = logins[idx];
-            final String name = names[idx];
 			MatcherAssert.assertThat(
-				"User should match in descending order.",
+				"Users should match in descending order.",
 				user,
 				new Satisfies<>(
-						usr -> usr.name().equals(user.name()) &&
-							   usr.login().equals(user.login()) &&
-							   usr.password().equals(user.password())
+					usr -> usr.name().equals(name) &&
+						   usr.login().equals(login)
 				)
 			);
+			idx ++;
 		}
     }
 }
