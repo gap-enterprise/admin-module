@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.surati.gap.admin.module.tk;
+package io.surati.gap.admin.module.web;
 
 import org.takes.Request;
 import org.takes.Response;
