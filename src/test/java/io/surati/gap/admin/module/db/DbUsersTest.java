@@ -49,17 +49,18 @@ final class DbUsersTest {
             "liquibase/db-admin.changelog-master.xml"
         );
     	this.users = new DbUsers(source);
-    	this.user = this.users.register("Administrateur", "admin", "admin");
+    	this.user = this.users.register("Administrateur", "admin", "@dminP@ss");
     }
 	
 	@Test
-	void register() {
+	void registersAnUser() {
+		final User user = this.users.register("Marx Brou", "brou87", "admin");
 		MatcherAssert.assertThat(
-			this.users.get(1L),
+			this.users.get(2L),
 			new Satisfies<>(
-				usr -> usr.name().equals(this.user.name()) &&
-					   usr.login().equals(this.user.login()) &&
-					   usr.password().equals(this.user.password())
+				usr -> usr.name().equals(user.name()) &&
+					   usr.login().equals(user.login()) &&
+					   usr.password().equals(user.password())
 			)
 		);
 	}
@@ -97,7 +98,7 @@ final class DbUsersTest {
 	@Test 
 	void authenticatesUserWithNonEncryptedPassword() {
 		MatcherAssert.assertThat(
-			this.users.authenticate("admin", "admin"),
+			this.users.authenticate("admin", "@dminP@ss"),
 			Matchers.is(true)
 		);
 	}
@@ -114,11 +115,11 @@ final class DbUsersTest {
     void iterate() {
     	final String[] names = {"Administrateur", "Mentor", "Guest"};
 		final String[] logins = {"admin", "mentor", "guest"};
-		final String password = "admin";
+		final String password = "password";
 		this.users.register(names[1], logins[1], password);
 		this.users.register(names[2], logins[2], password);
 		MatcherAssert.assertThat(
-            "Application should have two registrations.",
+            "Application should have three registrations.",
             this.users.count(),
             new IsEqual<>(Long.valueOf(3L))
         );
@@ -127,7 +128,7 @@ final class DbUsersTest {
 			final String name = names[idx];
 			final String login = logins[idx];
 			MatcherAssert.assertThat(
-				"Users should match in descending order.",
+				"Users should match in ascending order.",
 				user,
 				new Satisfies<>(
 					usr -> usr.name().equals(name) &&
