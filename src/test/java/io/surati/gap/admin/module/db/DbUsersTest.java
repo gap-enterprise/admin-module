@@ -27,9 +27,12 @@ import com.lightweight.db.EmbeddedPostgreSQLDataSource;
 import com.lightweight.db.LiquibaseDataSource;
 import io.surati.gap.admin.module.api.User;
 import io.surati.gap.admin.module.api.Users;
-import io.surati.gap.admin.module.secure.EncryptedWordImpl;
-import io.surati.gap.admin.module.secure.GeneratedSalt;
 
+/**
+ * Test case for {@link DbUsers}.
+ *
+ * @since 0.1
+ */
 final class DbUsersTest {
 
     /**
@@ -38,9 +41,9 @@ final class DbUsersTest {
     private Users users;
     
     /**
-     * User user.
+     * User admin.
      */
-    private User user;
+    private User admin;
 	
 	@BeforeEach
     void setup() {
@@ -49,18 +52,19 @@ final class DbUsersTest {
             "liquibase/db-admin.changelog-master.xml"
         );
     	this.users = new DbUsers(source);
-    	this.user = this.users.register("Administrateur", "admin", "@dminP@ss");
+    	this.admin = this.users.register("Administrateur", "admin", "@dminP@ss");
     }
 	
 	@Test
 	void registersAnUser() {
-		final User user = this.users.register("Marx Brou", "brou87", "admin");
+		final String name = "Marx Brou";
+		final String login = "brou87";
+		final User user = this.users.register(name, login, "broupwd");
 		MatcherAssert.assertThat(
-			this.users.get(2L),
+			user,
 			new Satisfies<>(
-				usr -> usr.name().equals(user.name()) &&
-					   usr.login().equals(user.login()) &&
-					   usr.password().equals(user.password())
+				usr -> usr.name().equals(name) &&
+				   usr.login().equals(login)
 			)
 		);
 	}
@@ -68,27 +72,28 @@ final class DbUsersTest {
 	@Test
 	public void checksUserExistenceByItsLogin() {
 		MatcherAssert.assertThat(
-			this.users.has(this.user.login()),
+			this.users.has(this.admin.login()),
 			Matchers.is(true)
 		);
 	}
 	
 	@Test
 	public void getsUserById() {
-		final User currentuser = this.users.get(this.user.id());
+		final User user = this.users.get(this.admin.id());
 		MatcherAssert.assertThat(
-			currentuser,
+			user,
 			new Satisfies<>(
-				usr -> usr.id().equals(this.user.id()) &&
-					   usr.login().equals(this.user.login())
+				usr -> usr.id().equals(this.admin.id()) &&
+				   usr.name().equals(this.admin.name()) &&
+                   usr.login().equals(this.admin.login())
 			)
 		);
 	}
 	
 	@Test
 	void countsTotalNumberOfUsers() {
-		this.users.register("Mentor", "mentor", "gap2022");
-		this.users.register("Guest", "guest", "gap2022");
+		this.users.register("Mentor", "mentor", "mentorpwd");
+		this.users.register("Guest", "guest", "guestpwd");
 		MatcherAssert.assertThat(
             this.users.count(),
             Matchers.equalTo(3L)
@@ -106,7 +111,10 @@ final class DbUsersTest {
 	@Test
 	void authenticatesUserWithEncryptedPassword() {
 		MatcherAssert.assertThat(
-			users.authenticatePwdEncrypted(this.user.login(), this.user.password()),
+			users.authenticatePwdEncrypted(
+				this.admin.login(),
+				this.admin.password()
+			),
 			Matchers.is(true)
 		);
 	}
@@ -115,11 +123,10 @@ final class DbUsersTest {
     void iterate() {
     	final String[] names = {"Administrateur", "Mentor", "Guest"};
 		final String[] logins = {"admin", "mentor", "guest"};
-		final String password = "password";
-		this.users.register(names[1], logins[1], password);
-		this.users.register(names[2], logins[2], password);
+		this.users.register(names[1], logins[1], "pwd1");
+		this.users.register(names[2], logins[2], "pwd2");
 		MatcherAssert.assertThat(
-            "Application should have three registrations.",
+            "Application should have three users.",
             this.users.count(),
             new IsEqual<>(Long.valueOf(3L))
         );
