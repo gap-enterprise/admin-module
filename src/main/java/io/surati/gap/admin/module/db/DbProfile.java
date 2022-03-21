@@ -16,6 +16,11 @@
  */
 package io.surati.gap.admin.module.db;
 
+/**
+ * Profile from Database
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Profile;
 import io.surati.gap.admin.module.api.ProfileAccesses;
 import io.surati.gap.admin.module.exceptions.DatabaseException;

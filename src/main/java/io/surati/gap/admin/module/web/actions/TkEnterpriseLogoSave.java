@@ -1,5 +1,12 @@
 package io.surati.gap.admin.module.web.actions;
 
+/**
+ * Take that change an enterprise logo.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Company;
 import io.surati.gap.admin.module.api.Log;
 import io.surati.gap.admin.module.db.DbLog;

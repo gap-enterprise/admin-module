@@ -23,6 +23,13 @@ SOFTWARE.
  */ 
 package io.surati.gap.admin.module.web.pages;
 
+/**
+ * Take Profile view
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Profile;
 import io.surati.gap.admin.module.db.DbProfileAccesses;
 import io.surati.gap.admin.module.db.DbProfiles;

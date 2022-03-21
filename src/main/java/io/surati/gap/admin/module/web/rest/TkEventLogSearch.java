@@ -1,5 +1,12 @@
 package io.surati.gap.admin.module.web.rest;
 
+/**
+ * Take that searchs an event log.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.EventLogs;
 import io.surati.gap.admin.module.db.DbPaginedEventLogs;
 import io.surati.gap.admin.module.web.xe.XeEventLogsJson;

@@ -40,7 +40,7 @@ import org.takes.rs.xe.XeSource;
  *
  * <p>The class is immutable and thread-safe.</p>
  *
- * @since 3.0
+ * @since 0.1
  */
 public final class TkProfileList implements Take  {
 

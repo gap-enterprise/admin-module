@@ -31,7 +31,7 @@ import org.xembly.Directives;
 /**
  * Xml Reference document type.
  *
- * @since 3.0
+ * @since 0.1
  */
 public final class XeReferenceDocumentType extends XeWrap {
 

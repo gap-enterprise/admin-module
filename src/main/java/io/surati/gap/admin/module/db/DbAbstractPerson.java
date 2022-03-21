@@ -28,7 +28,7 @@ import java.sql.SQLException;
 /**
  * Person in Database.
  * 
- * @since 3.0
+ * @since 0.1
  */
 public abstract class DbAbstractPerson implements Person {
 

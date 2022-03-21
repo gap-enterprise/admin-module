@@ -1,5 +1,9 @@
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * Xml Reference Document Types
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.ReferenceDocumentType;
 import java.util.Arrays;
 import java.util.stream.Collectors;

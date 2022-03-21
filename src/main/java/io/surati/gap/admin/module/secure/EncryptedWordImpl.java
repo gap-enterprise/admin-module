@@ -15,7 +15,10 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.secure;
-
+/**
+ * EncryptedWordImpl
+ * @since 0.1
+ */
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;

@@ -15,7 +15,13 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.web;
-
+/**
+ * Take that authentificates an user.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;

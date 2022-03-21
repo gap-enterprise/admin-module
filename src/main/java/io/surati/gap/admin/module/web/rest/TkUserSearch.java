@@ -22,7 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */ 
 package io.surati.gap.admin.module.web.rest;
-
+/**
+ * Take that searchs an user.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Users;
 import io.surati.gap.admin.module.db.DbPaginedUsers;
 import io.surati.gap.admin.module.web.xe.XeUsersJson;

@@ -51,7 +51,7 @@ import java.util.stream.Stream;
 /**
  * User in Database.
  * 
- * @since 3.0
+ * @since 0.1
  */
 public final class DbUser extends DbAbstractPerson implements User {
 	

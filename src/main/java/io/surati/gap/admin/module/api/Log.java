@@ -16,6 +16,11 @@
  */
 package io.surati.gap.admin.module.api;
 
+/**
+ * Log
+ *
+ * @since 0.1
+ */
 public interface Log {
 	/**
 	 * Message de notification, d'information

@@ -23,6 +23,10 @@ SOFTWARE.
  */ 
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * Xml UsersJson
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.User;
 import javax.json.Json;
 import javax.json.JsonArray;

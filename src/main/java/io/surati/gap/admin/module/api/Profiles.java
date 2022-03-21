@@ -16,6 +16,11 @@
  */
 package io.surati.gap.admin.module.api;
 
+/**
+ * Profiles
+ *
+ * @since 0.1
+ */
 public interface Profiles {
 
 	/**

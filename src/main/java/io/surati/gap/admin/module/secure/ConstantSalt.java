@@ -15,7 +15,10 @@
  * SOFTWARE.
  */
 package io.surati.gap.admin.module.secure;
-
+/**
+ * Constant Salt
+ * @since 0.1
+ */
 public final class ConstantSalt implements Salt {
 
 	private final String value;

@@ -1,5 +1,10 @@
 package io.surati.gap.admin.module.api;
 
+/**
+ * Reference Document Type
+ *
+ * @since 0.1
+ */
 public enum ReferenceDocumentType {
 
 	NONE("Aucun"),

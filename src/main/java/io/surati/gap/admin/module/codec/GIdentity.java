@@ -16,6 +16,11 @@
  */
 package io.surati.gap.admin.module.codec;
 
+/**
+ * GIdentity
+ *
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.User;
 import org.takes.facets.auth.Identity;
 

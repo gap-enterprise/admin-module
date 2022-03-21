@@ -1,5 +1,9 @@
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * XeEventLogsJson
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.EventLog;
 import io.surati.gap.commons.utils.convert.FrShortDateFormat;
 import org.takes.rs.RsJson;

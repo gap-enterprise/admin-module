@@ -16,6 +16,11 @@
  */
 package io.surati.gap.admin.module.api;
 
+/**
+ * Company
+ *
+ * @since 0.1
+ */
 import java.io.IOException;
 import java.io.InputStream;
 

@@ -23,6 +23,10 @@ SOFTWARE.
  */
 package io.surati.gap.admin.module.web.xe;
 
+/**
+ * XeProfiles
+ * @since 0.1
+ */
 import io.surati.gap.admin.module.api.Profile;
 import io.surati.gap.admin.module.api.Profiles;
 import org.cactoos.iterable.Joined;

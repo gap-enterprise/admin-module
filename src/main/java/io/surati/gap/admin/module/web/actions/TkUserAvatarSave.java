@@ -1,5 +1,12 @@
 package io.surati.gap.admin.module.web.actions;
 
+/**
+ * Take that saves an user avatar.
+ *
+ * <p>The class is immutable and thread-safe.</p>
+ *
+ * @since 0.1
+ */
 import javax.sql.DataSource;
 import java.io.InputStream;
 import java.util.logging.Level;
