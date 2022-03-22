@@ -33,7 +33,7 @@ SOFTWARE.
                 <div class="slick-slider">
                   <div>
                     <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-plum-plate" tabindex="-1">
-                      <div class="slide-img-bg" style="background-image: url('/img/paymoney.jpg');"/>
+                      <div class="slide-img-bg" style="background-image: url('/io/surati/gap/web/base/img/paymoney.jpg');"/>
                       <div class="slider-content">
                         <h1 style="font-size: 100px;">
                           <xsl:text>GAP</xsl:text><small style="font-size: 10px">v<xsl:value-of select="version/name"/></small>
@@ -53,7 +53,7 @@ SOFTWARE.
                   <xsl:with-param name="flash" select="flash"/>
                 </xsl:call-template>
                 <div class="app-logo1">
-                  <img src="/img/logo.png" style="height:60px; margin-bottom: 20px;"/>
+                  <img src="/io/surati/gap/web/base/img/logo.png" style="height:60px; margin-bottom: 20px;"/>
                 </div>
                 <h4 class="mb-0">
                   <span class="d-block">
