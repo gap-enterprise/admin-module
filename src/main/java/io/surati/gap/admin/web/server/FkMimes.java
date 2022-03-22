@@ -18,63 +18,63 @@ public final class FkMimes extends FkWrap {
 		super(
 			new FkChain(
 				new FkRegex(
-					"/css/.+", 
+					"/io/.+/css/.+",
 					new TkWithType(new TkClasspath(), "text/css")
 				),
 				new FkRegex(
-					"/js/.+", 
+					"/io/.+/js/.+",
 					new TkWithType(new TkClasspath(), "application/javascript")
 				),
 				new FkRegex(
-					"/img/.+\\.svg", 
+					"/io/.+/img/.+\\.svg",
 					new TkWithType(new TkClasspath(), "image/svg+xml")
 				),
 				new FkRegex(
-					"/img/.+\\.png", 
+					"/io/.+/img/.+\\.png",
 					new TkWithType(new TkClasspath(), "image/png")
 				),
 				new FkRegex(
-					"/img/.+\\.jpg", 
+					"/io/.+/img/.+\\.jpg",
 					new TkWithType(new TkClasspath(), "image/jpeg")
 				),
 				new FkRegex(
-					"/img/.+\\.gif", 
+					"/io/.+/img/.+\\.gif",
 					new TkWithType(new TkClasspath(), "image/gif")
 				),
 				new FkRegex(
-					"/img/.+\\.eot", 
+					"/io/.+/img/.+\\.eot",
 					new TkWithType(new TkClasspath(), "application/vnd.ms-fontobject")
 				),
 				new FkRegex(
-					"/img/.+\\.ttf", 
+					"/io/.+/img/.+\\.ttf",
 					new TkWithType(new TkClasspath(), "font/ttf")
 				),
 				new FkRegex(
-					"/img/.+\\.woff", 
+					"/io/.+/img/.+\\.woff",
 					new TkWithType(new TkClasspath(), "font/woff")
 				),
 				new FkRegex(
-					"/img/.+\\.woff2", 
+					"/io/.+/img/.+\\.woff2",
 					new TkWithType(new TkClasspath(), "font/woff2")
 				),
 				new FkRegex(
-					"/img/.+\\.ico", 
+					"/io/.+/img/.+\\.ico",
 					new TkWithType(new TkClasspath(), "image/x-icon")
 				),
 				new FkRegex(
-					"/csv/.+\\.csv",
+					"/io/.+/csv/.+\\.csv",
 					new TkWithType(new TkClasspath(), "text/csv")
 	            ),
 				new FkRegex(
-					"/xls/.+\\.xls",
+					"/io/.+/xls/.+\\.xls",
 					new TkWithType(new TkClasspath(), "application/vnd.ms-excel")
 	            ),
 				new FkRegex(
-					"/xls/.+\\.xlsx",
+					"/io/.+/xls/.+\\.xlsx",
 					new TkWithType(new TkClasspath(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	            ),
 				new FkRegex(
-					"/images/.+",
+					"/io/.+/images/.+",
 					new TkFiles(".")
 	            )
 			)
