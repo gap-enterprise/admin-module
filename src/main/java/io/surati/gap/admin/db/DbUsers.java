@@ -24,17 +24,15 @@ import io.surati.gap.admin.exceptions.DatabaseException;
 import io.surati.gap.admin.secure.EncryptedWordImpl;
 import io.surati.gap.admin.secure.GeneratedSalt;
 import io.surati.gap.admin.secure.Salt;
-import org.apache.commons.lang3.StringUtils;
-import org.cactoos.text.Joined;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
+import org.apache.commons.lang3.StringUtils;
+import org.cactoos.text.Joined;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
 
 /**
  * Users in Database.
@@ -43,6 +41,26 @@ import java.util.Collection;
  */
 public final class DbUsers implements Users {
 
+	/**
+	 * Table of user.
+	 */
+	private static final io.surati.gap.admin.jooq.generated.tables.AppUser APP_USER =
+		io.surati.gap.admin.jooq.generated.tables.AppUser.APP_USER;
+
+	/**
+	 * Table of person.
+	 */
+	private static final io.surati.gap.admin.jooq.generated.tables.Person PERSON =
+		io.surati.gap.admin.jooq.generated.tables.Person.PERSON;
+	
+	/**
+	 * jOOQ database context.
+	 */
+	private final DSLContext ctx;
+	
+	/**
+	 * DataSource source.
+	 */
 	private final DataSource source;
 	
 	/**
@@ -51,10 +69,11 @@ public final class DbUsers implements Users {
 	 */
 	public DbUsers(final DataSource source) {
 		this.source = source;
+		this.ctx = DSL.using(new DefaultConfiguration().set(this.source));
 	}
 	
 	@Override
-	public boolean authenticate(String login, String password) {
+	public boolean authenticate(final String login, final String password) {
 		if(this.has(login)) {
 			final User user = this.get(login);
 			final String userpwd = user.password();
@@ -74,7 +93,7 @@ public final class DbUsers implements Users {
 	}
 
 	@Override
-	public boolean authenticatePwdEncrypted(String login, String password) {
+	public boolean authenticatePwdEncrypted(final String login, final String password) {
 		if(this.has(login)) {
 			final User user = this.get(login);
 			if(user.password().equals(password)) {
@@ -92,127 +111,74 @@ public final class DbUsers implements Users {
 	}
 	
 	@Override
-	public User get(String login) {
-		
-		try(
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT id FROM app_user WHERE login=?");
-		){
-			pstmt.setString(1, login);
-		
-			try(final ResultSet rs = pstmt.executeQuery()){
-				if(rs.next()) {
-					Long id = rs.getLong(1);
-					return new DbUser(source, id);
-				} else {
-					throw new IllegalArgumentException(String.format("User with login %s not found !", login));
-				}			
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
+	public User get(final String login) {
+		if(this.ctx.fetchCount(APP_USER, APP_USER.LOGIN.eq(login)) == 0) {
+			throw new IllegalArgumentException(
+				String.format("User with login %s not found !", login)
+			);
 		}
+		return new DbUser(
+			this.source,
+			this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId()
+		);
 	}
 
 	@Override
-	public User get(Long id) {
-		try(
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM app_user WHERE id=?");
-		){
-			pstmt.setLong(1, id);
-		
-			try(final ResultSet rs = pstmt.executeQuery()){
-				if(rs.next()) {
-					return new DbUser(source, id);
-				} else {
-					throw new IllegalArgumentException(String.format("User with ID %s not found !", id));
-				}			
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
+	public User get(final Long id) {
+		if (this.ctx.fetchCount(APP_USER, APP_USER.ID.eq(id)) == 0) {
+			throw new IllegalArgumentException(
+				String.format("User with ID %s not found !", id)
+			);
 		}
+		return new DbUser(source, id);
 	}
 
 	@Override
-	public User register(String name, String login, String password) {
-		
+	public User register(final String name, final String login, final String password) {
 		if(StringUtils.isBlank(name)) 
 			throw new IllegalArgumentException("Le nom  ne peut être vide !");
-		
 		if(StringUtils.isBlank(login))
 			throw new IllegalArgumentException("Le login ne peut être vide !");
-		
 		if(StringUtils.isBlank(password))
 			throw new IllegalArgumentException("Le mot de passe ne peut être vide !");
-		
 		if(this.has(login))
-			throw new IllegalArgumentException(String.format("Ce login %s est déjà utilisé !", login));
-		
-		try(
-				final Connection connection = this.source.getConnection();
-				final PreparedStatement pstmt = connection.prepareStatement("INSERT INTO person (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-				final PreparedStatement pstmt1 = connection.prepareStatement("INSERT INTO app_user (id, login, password, salt) VALUES (?, ?, ?, ?)")
-		){			
-			pstmt.setString(1, name);			
-			pstmt.executeUpdate();		
-			final Long id;
-			try (final ResultSet rs = pstmt.getGeneratedKeys()) {
-				rs.next();
-				id = rs.getLong(1);
-			}		
-			pstmt1.setLong(1, id);
-			pstmt1.setString(2, login);
-			final Salt salt = new GeneratedSalt();
-			pstmt1.setString(3, new EncryptedWordImpl(password, salt).value());
-			pstmt1.setString(4, salt.value());
-			pstmt1.executeUpdate();
-			return new DbUser(this.source, id);
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
-		}
+			throw new IllegalArgumentException("Ce login est déjà utilisé !");
+		Long idx = this.ctx.insertInto(PERSON)
+			.set(PERSON.NAME, name)
+			.returning(PERSON.ID)
+			.fetchOne().getId();
+		final Salt salt = new GeneratedSalt();
+		this.ctx.insertInto(APP_USER)
+			.set(APP_USER.ID, idx)
+			.set(APP_USER.LOGIN, login)
+			.set(APP_USER.PASSWORD, new EncryptedWordImpl(password, salt).value())
+			.set(APP_USER.SALT, salt.value())
+			.execute();
+		return new DbUser(this.source, idx);
 	}
 
 	@Override
 	public Iterable<User> iterate() {
-		
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT id FROM app_user")
-		){
-			final Collection<User> items = new ArrayList<>();
-			
-			try(final ResultSet rs = pstmt.executeQuery()){
-				while(rs.next()) {
-					items.add(new DbUser(source, rs.getLong(1)));
-				}
-			}
-			
-			return items;
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
-		}
+		return this.ctx
+			.selectFrom(APP_USER)
+			.fetch(
+				rec -> new DbUser(
+					this.source, rec.getId()
+				)
+			);
 	}
 
 	@Override
-	public boolean has(String login) {
-		try (
-			final Connection connection = source.getConnection();
-			final PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(*) as nb FROM app_user WHERE login=?")
-		){
-			pstmt.setString(1, login);
-		
-			try(final ResultSet rs = pstmt.executeQuery()){
-				rs.next();
-				Long nb = rs.getLong(1);
-				return nb > 0;
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException(e);
-		}
+	public boolean has(final String login) {
+		return this.ctx
+			.fetchCount(
+				APP_USER, 
+				APP_USER.LOGIN.eq(login)
+			) > 0;
 	}
 	
 	@Override
-	public void remove(final Long id) {
+	public void remove(final Long id) {		
 		try {
 			final boolean used = new JdbcSession(this.source)
 	            .sql(
@@ -229,13 +195,15 @@ public final class DbUsers implements Users {
 	            .set(id)
 	            .select(new SingleOutcome<>(Long.class)) > 0;
 	        if(used) {
-	        	throw new IllegalArgumentException("L'utilisateur ne peut pas être supprimé (déjà utilisé) !");
+	        	throw new IllegalArgumentException(
+					"L'utilisateur ne peut pas être supprimé (déjà utilisé) !"
+				);
 	        }
 		} catch (SQLException ex) {
 			throw new DatabaseException(ex);
 		}
 		try (
-			final Connection connection = source.getConnection();
+			final Connection connection = this.source.getConnection();
 			final PreparedStatement pstmt = connection.prepareStatement("DELETE FROM app_user WHERE id=?");
 			final PreparedStatement pstmt1 = connection.prepareStatement("DELETE FROM person WHERE id=?");
 		) {
@@ -250,14 +218,9 @@ public final class DbUsers implements Users {
 	
 	@Override
 	public Long count() {
-		try {
-			return
-				new JdbcSession(this.source)
-					.sql("SELECT COUNT(*) FROM app_user")
-					.select(new SingleOutcome<>(Long.class));
-		} catch(SQLException ex) {
-			throw new DatabaseException(ex);
-		}
+		return Long.valueOf(
+			this.ctx.fetchCount(APP_USER)
+		);
 	}
 
 }

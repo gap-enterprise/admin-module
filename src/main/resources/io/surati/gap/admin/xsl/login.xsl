@@ -36,7 +36,8 @@ SOFTWARE.
                       <div class="slide-img-bg" style="background-image: url('/io/surati/gap/web/base/img/paymoney.jpg');"/>
                       <div class="slider-content">
                         <h1 style="font-size: 100px;">
-                          <xsl:text>GAP</xsl:text><small style="font-size: 10px">v<xsl:value-of select="version/name"/></small>
+                          <xsl:text>GAP</xsl:text>
+                          <small style="font-size: 10px">v<xsl:value-of select="version/name"/></small>
                         </h1>
                         <p style="font-size: 20px;">
                           <xsl:text>Plateforme sécurisée de paiements bancaires automatisés</xsl:text>
