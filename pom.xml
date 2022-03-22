@@ -193,6 +193,19 @@ SOFTWARE.
       <artifactId>web-base</artifactId>
       <version>0.1</version>
     </dependency>
+    <dependency>
+      <groupId>net.sourceforge.saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>9.1.0.8</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>9.1.0.8</version>
+      <classifier>dom</classifier>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
