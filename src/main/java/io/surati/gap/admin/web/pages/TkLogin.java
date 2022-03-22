@@ -48,7 +48,7 @@ public final class TkLogin implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		return new RsPage(
-			"/xsl/login.xsl", 
+			"/io/surati/gap/admin/xsl/login.xsl",
 			req,
 			this.source
 		);
