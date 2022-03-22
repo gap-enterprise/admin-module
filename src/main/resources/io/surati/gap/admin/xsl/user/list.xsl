@@ -81,7 +81,7 @@ SOFTWARE.
         <div class="row" ng-if="vm.loadingData">
           <div class="col-sm-12 text-center">
             <h4 class="text-muted">Chargement des données... <small>Veuillez patienter</small></h4>
-            <img src="/img/loader.gif" width="250"/>
+            <img src="/io/surati/gap/web/base/img/loader.gif" width="250"/>
           </div>
         </div>
         <div ng-if="!vm.loadingData">
