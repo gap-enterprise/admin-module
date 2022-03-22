@@ -79,11 +79,6 @@ import java.util.regex.Pattern;
  * Entry of application.
  * 
  * @since 0.1
- * @todo #29:30min bump `web-base` to version `0.2`
- *  We noticed that location folder must be unique for each project for
- *  if there are two same locations, one will override the other. So in
- *  version `0.2`, we expect resources files to be relocate in a unique
- *  folder.
  */
 public final class Main {
 
@@ -119,7 +114,7 @@ public final class Main {
         final DataSource source = new HikariDataSource(configdb);
 		final Database database = new DatabaseLiquibaseUpdate(
 			new BasicDatabase(source),
-			"liquibase/db-admin.changelog-master.xml"
+			"io/surati/gap/admin/liquibase/db-admin.changelog-master.xml"
 		);		
 		database.start();
 		final Pass pass = new PsChain(
