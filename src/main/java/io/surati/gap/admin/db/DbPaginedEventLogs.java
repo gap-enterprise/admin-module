@@ -16,14 +16,14 @@
  */
 package io.surati.gap.admin.db;
 
-import io.surati.gap.admin.jooq.generated.tables.EventLog;
+import io.surati.gap.admin.api.EventLog;
 import io.surati.gap.admin.api.EventLogs;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 import io.surati.gap.commons.utils.time.Period;
+import org.apache.commons.lang3.StringUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -39,8 +39,8 @@ public final class DbPaginedEventLogs implements EventLogs {
 	/**
 	 * Table of log events.
 	 */
-	private static final EventLog EVENT_LOG =
-		EventLog.EVENT_LOG;
+	private static final io.surati.gap.admin.jooq.generated.tables.EventLog EVENT_LOG =
+		io.surati.gap.admin.jooq.generated.tables.EventLog.EVENT_LOG;
 
 	/**
 	 * jOOQ database context.
@@ -93,7 +93,7 @@ public final class DbPaginedEventLogs implements EventLogs {
 	}
 	
 	@Override
-	public io.surati.gap.admin.api.EventLog get(final Long id) {
+	public EventLog get(final Long id) {
 		if (this.ctx.fetchCount(EVENT_LOG, this.condition()) == 0) {
 			throw new IllegalArgumentException(
 				String.format("Log event with ID %s not found !", id)
@@ -106,12 +106,12 @@ public final class DbPaginedEventLogs implements EventLogs {
 	}
 
 	@Override
-	public Iterable<io.surati.gap.admin.api.EventLog> iterate() {
+	public Iterable<EventLog> iterate() {
 		return this.ctx
 			.selectFrom(EVENT_LOG)
 			.where(this.condition())
 			.orderBy(EVENT_LOG.ID.desc())
-			.seek(this.nbperpage * (this.page - 1))
+			.offset(this.nbperpage * (this.page - 1))
 			.limit(this.nbperpage)
 			.fetch(
 				rec -> new DbEventLog(this.source, rec.getId())
@@ -127,24 +127,26 @@ public final class DbPaginedEventLogs implements EventLogs {
 	}
 
 	private Condition condition() {
-		Condition result = DSL.trueCondition()
-			.and(
-				DSL.noCondition()
+		Condition result = DSL.trueCondition();
+		if (StringUtils.isNotBlank(filter)) {
+			result = result.and(
+				DSL.falseCondition()
 					.or(EVENT_LOG.MESSAGE.like("%" + this.filter + "%"))
 					.or(EVENT_LOG.LEVEL_ID.like("%" + this.filter + "%"))
 					.or(EVENT_LOG.AUTHOR.like("%" + this.filter + "%"))
 					.or(EVENT_LOG.IP_ADDRESS.like("%" + this.filter + "%"))
 			);
+		}
 		if (this.period.begin() != LocalDate.MIN) {
 			result = result.and(
-				EVENT_LOG.DATE.greaterThan(
+				EVENT_LOG.DATE.greaterOrEqual(
 					LocalDateTime.of(this.period.begin(), LocalTime.MIDNIGHT)
 				)
 			);
 		}
 		if (this.period.end() != LocalDate.MAX) {
 			result = result.and(
-				EVENT_LOG.DATE.lessThan(
+				EVENT_LOG.DATE.lessOrEqual(
 					LocalDateTime.of(this.period.end(), LocalTime.of(23, 59))
 				)
 			);
