@@ -71,7 +71,7 @@ public final class TkProfileView implements Take {
 			new XeProfile(profile)
 		);
 		return new RsPage(
-			"/xsl/access_right_profile/view.xsl", 
+			"/io/surati/gap/admin/xsl/access_right_profile/view.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

@@ -82,7 +82,7 @@ public final class TkEnterprise implements Take {
 			doctype
 		);
 		return new RsPage(
-			"/xsl/enterprise/view.xsl", 
+			"/io/surati/gap/admin/xsl/enterprise/view.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

@@ -65,7 +65,7 @@ public final class TkUserView implements Take {
 		final User user = new DbUsers(this.source).get(id);
 		final XeSource src = new XeUser(user);
 		return new RsPage(
-			"/xsl/user/view.xsl", 
+			"/io/surati/gap/admin/xsl/user/view.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

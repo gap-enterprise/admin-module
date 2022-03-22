@@ -34,7 +34,7 @@ public final class TkEnterpriseLogoEdit implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		return new RsPage(
-			"/xsl/enterprise/logo_edit.xsl", 
+			"/io/surati/gap/admin/xsl/enterprise/logo_edit.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

@@ -191,7 +191,7 @@ SOFTWARE.
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>web-base</artifactId>
-      <version>0.2.1</version>
+      <version>0.3.1</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.saxon</groupId>

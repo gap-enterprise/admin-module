@@ -79,7 +79,7 @@ public final class TkUserEdit implements Take  {
 			);
 		}
 		return new RsPage(
-			"/xsl/user/edit.xsl", 
+			"/io/surati/gap/admin/xsl/user/edit.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

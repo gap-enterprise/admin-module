@@ -64,7 +64,7 @@ public final class TkUserProfileEditPassword implements Take {
 		final XeSource src;
 		src = new XeUser(currentUser);
 		return new RsPage(
-			"/xsl/profile/change-password.xsl", 
+			"/io/surati/gap/admin/xsl/profile/change-password.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

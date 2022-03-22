@@ -70,7 +70,7 @@ public final class TkUserEditPassword implements Take {
 		final User user = new DbUsers(this.source).get(id);
 		src = new XeUser(user);
 		return new RsPage(
-			"/xsl/user/password.xsl", 
+			"/io/surati/gap/admin/xsl/user/password.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

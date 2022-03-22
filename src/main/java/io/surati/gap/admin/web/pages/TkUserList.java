@@ -55,7 +55,7 @@ public class TkUserList implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		return new RsPage(
-			"/xsl/user/list.xsl", 
+			"/io/surati/gap/admin/xsl/user/list.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

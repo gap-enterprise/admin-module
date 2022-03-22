@@ -43,7 +43,7 @@ public final class TkUserAvatarEdit implements Take {
 		final User user = new DbUsers(this.source).get(id);
 		final XeSource src = new XeUser(user);
 		return new RsPage(
-			"/xsl/user/avatar_edit.xsl", 
+			"/io/surati/gap/admin/xsl/user/avatar_edit.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

@@ -50,7 +50,7 @@ public final class TkDashboardBlank implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		return new RsPage(
-			"/xsl/dashboard/blank.xsl", 
+			"/io/surati/gap/admin/xsl/dashboard/blank.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

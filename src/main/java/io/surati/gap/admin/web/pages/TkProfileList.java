@@ -63,7 +63,7 @@ public final class TkProfileList implements Take  {
 			new DbProfiles(this.source)
 		);
 		return new RsPage(
-			"/xsl/access_right_profile/list.xsl", 
+			"/io/surati/gap/admin/xsl/access_right_profile/list.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

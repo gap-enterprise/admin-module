@@ -64,7 +64,7 @@ public final class TkUserProfile implements Take {
 		final User user = new RqUser(this.source, req);
 		final XeSource src = new XeUser("user", user);
 		return new RsPage(
-			"/xsl/profile/profile.xsl", 
+			"/io/surati/gap/admin/xsl/profile/profile.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

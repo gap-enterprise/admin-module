@@ -77,7 +77,7 @@ public final class TkEnterpriseEdit implements Take {
 			new XeAppend("default_reference_document_type_id", company.parameter(PropCompany.DEFAULT_REFERENCE_DOCUMENT_TYPE))
 		);
 		return new RsPage(
-			"/xsl/enterprise/edit.xsl", 
+			"/io/surati/gap/admin/xsl/enterprise/edit.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

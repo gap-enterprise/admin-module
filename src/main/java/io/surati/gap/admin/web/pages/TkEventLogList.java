@@ -30,7 +30,7 @@ public final class TkEventLogList implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		return new RsPage(
-			"/xsl/event_log/list.xsl", 
+			"/io/surati/gap/admin/xsl/event_log/list.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

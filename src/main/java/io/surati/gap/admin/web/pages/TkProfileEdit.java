@@ -72,7 +72,7 @@ public final class TkProfileEdit implements Take {
 			src = new XeProfile(profile);
 		}
 		return new RsPage(
-			"/xsl/access_right_profile/edit.xsl", 
+			"/io/surati/gap/admin/xsl/access_right_profile/edit.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

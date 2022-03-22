@@ -42,7 +42,7 @@ public final class TkEventLogView implements Take {
 		final EventLog log = new DbEventLogs(this.source).get(id);
 		final XeSource src = new XeEventLog(log);
 		return new RsPage(
-			"/xsl/event_log/view.xsl", 
+			"/io/surati/gap/admin/xsl/event_log/view.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(

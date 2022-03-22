@@ -51,7 +51,7 @@ public final class TkChangePassword implements Take {
 	public Response act(Request req) throws Exception {
 				
 		return new RsPage(
-			"/xsl/profile/change-password.xsl", 
+			"/io/surati/gap/admin/xsl/profile/change-password.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(
