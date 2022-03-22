@@ -36,11 +36,11 @@ public final class DataSourceExtension
             Arrays.asList(
                 new LiquibaseDataSource(
                     new EmbeddedPostgreSQLDataSource(),
-                    "liquibase/db-admin.changelog-master.xml"
+                    "io/surati/gap/admin/liquibase/db-admin.changelog-master.xml"
                 ),
                 new LiquibaseDataSource(
                     new EmbeddedOracleDataSource(),
-                    "liquibase/db-admin.changelog-master.xml"
+                    "io/surati/gap/admin/liquibase/db-admin.changelog-master.xml"
                 )
             )
         ).stream().map(DataSourceContext::new);

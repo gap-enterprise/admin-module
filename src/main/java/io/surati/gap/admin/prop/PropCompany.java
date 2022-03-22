@@ -60,7 +60,7 @@ public final class PropCompany implements Company {
 			try (
 				InputStream in = Company.class
 					.getClassLoader()
-					.getResourceAsStream("img/logo.png")
+					.getResourceAsStream("io/surati/gap/admin/img/logo.png")
 			) {
 				Files.copy(in, Paths.get(LOGO_DEFAULT_LOCATION));
 			} catch (IOException ex) {
