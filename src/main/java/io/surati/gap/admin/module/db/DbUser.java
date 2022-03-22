@@ -212,18 +212,14 @@ public final class DbUser extends DbAbstractPerson implements User {
 
 	@Override
 	public void assign(Profile profile) {		
-		this.ctx.update(APP_USER)
-		.set(APP_USER.PROFILE_ID, profile.id())
-		.where(APP_USER.ID.eq(id))
-		.execute();
+		this.record.setProfileId(profile.id());
+		this.record.store();
 	}
 
 	@Override
 	public Salt salt() {
 		return new ConstantSalt(
-			this.ctx.select(APP_USER.SALT)
-			.from(APP_USER)
-			.where(APP_USER.ID.eq(id)).toString()
+			this.record.getSalt().toString()
 		);
 	}
 

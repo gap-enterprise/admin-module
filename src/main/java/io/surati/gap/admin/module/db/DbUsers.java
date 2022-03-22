@@ -119,18 +119,17 @@ public final class DbUsers implements Users {
 	
 	@Override
 	public User get(String login) {
-		if(this.ctx.fetchCount(APP_USER) == 0) {
+		if(this.ctx.fetchCount(APP_USER, APP_USER.LOGIN.eq(login)) == 0) {
 			throw new IllegalArgumentException(
 				String.format("User with login %s not found !", login)
 			);
 		}
-		Long id = this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId();
-		return new DbUser(source, id);
+		return new DbUser(source, this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId());
 	}
 
 	@Override
 	public User get(Long id) {
-		if (this.ctx.fetchCount(APP_USER) == 0) {
+		if (this.ctx.fetchCount(APP_USER, APP_USER.ID.eq(id)) == 0) {
 			throw new IllegalArgumentException(
 				String.format("User with ID %s not found !", id)
 			);
@@ -167,9 +166,7 @@ public final class DbUsers implements Users {
 		.set(APP_USER.SALT, new EncryptedWordImpl(password, salt).value())
 		.execute();
 		
-		Long id = this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId();
-		
-		return new DbUser(source, id);
+		return new DbUser(source, this.ctx.fetchOne(APP_USER, APP_USER.LOGIN.eq(login)).getId());
 	}
 
 	@Override
