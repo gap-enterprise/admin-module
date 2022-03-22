@@ -191,7 +191,7 @@ public final class Main {
 	                        new RsWithStatus(
 	                    		new RsHtml(
 	                    			new RsVelocity(
-                                        Main.class.getResource("/io/surati/gap/admin/vm/404.html.vm")
+                                        Main.class.getResource("/io/surati/gap/web/base/vm/404.html.vm")
                                     )
 	            			    ),
 	                            HttpURLConnection.HTTP_NOT_FOUND
@@ -290,7 +290,7 @@ public final class Main {
     	return new RsWithStatus(
 			new RsHtml(
 				new RsVelocity(
-                    Main.class.getResource("/io/surati/gap/admin/vm/500.html.vm")
+                    Main.class.getResource("/io/surati/gap/web/base/vm/500.html.vm")
                 )
 		    ),
 		    HttpURLConnection.HTTP_INTERNAL_ERROR
