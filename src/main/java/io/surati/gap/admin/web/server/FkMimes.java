@@ -74,7 +74,7 @@ public final class FkMimes extends FkWrap {
 					new TkWithType(new TkClasspath(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	            ),
 				new FkRegex(
-					"/io/.+/images/.+",
+					"/images/.+",
 					new TkFiles(".")
 	            )
 			)
