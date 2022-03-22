@@ -28,8 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.llorllale.cactoos.matchers.Satisfies;
-import com.lightweight.db.EmbeddedPostgreSQLDataSource;
-import com.lightweight.db.LiquibaseDataSource;
 
 /**
  * Test case for {@link DbUsers}.
@@ -51,11 +49,7 @@ final class DbUsersTest {
     private User admin;
 	
 	@BeforeEach
-    void setup() {
-    	final DataSource source = new LiquibaseDataSource(
-            new EmbeddedPostgreSQLDataSource(),
-            "liquibase/db-admin.changelog-master.xml"
-        );
+    void setup(final DataSource source) {
     	this.users = new DbUsers(source);
     	this.admin = new DbUser(source, 1L);
     }
