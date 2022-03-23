@@ -11,7 +11,7 @@ import io.surati.gap.admin.api.EventLogs;
 import io.surati.gap.admin.db.DbPaginedEventLogs;
 import io.surati.gap.admin.web.xe.XeEventLogsJson;
 import io.surati.gap.commons.utils.time.Period;
-import io.surati.gap.commons.utils.time.SafePeriodText;
+import io.surati.gap.commons.utils.time.SafePeriodFromText;
 import javax.sql.DataSource;
 import org.takes.Request;
 import org.takes.Response;
@@ -40,7 +40,7 @@ public final class TkEventLogSearch implements Take {
 		final String filter = href.single("filter", "");					
 		final Long page = Long.parseLong(href.single("page"));
 		final Long nbperpage = Long.parseLong(href.single("nbperpage"));
-		final Period period = new SafePeriodText(
+		final Period period = new SafePeriodFromText(
 			href.single("begindate", ""),
 			href.single("enddate", "")
 		);

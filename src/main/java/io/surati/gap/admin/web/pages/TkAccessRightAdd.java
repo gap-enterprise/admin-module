@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */ 
-package io.surati.gap.admin.web.actions;
+package io.surati.gap.admin.web.pages;
 
 import javax.sql.DataSource;
 import java.util.Collection;
@@ -30,8 +30,8 @@ import java.util.LinkedList;
 import io.surati.gap.admin.db.DbProfiles;
 import io.surati.gap.admin.api.Access;
 import io.surati.gap.admin.api.Profile;
-import io.surati.gap.admin.web.server.RsPage;
-import io.surati.gap.admin.web.xe.XeAccesses;
+import io.surati.gap.web.base.RsPage;
+import io.surati.gap.web.base.xe.XeAccesses;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

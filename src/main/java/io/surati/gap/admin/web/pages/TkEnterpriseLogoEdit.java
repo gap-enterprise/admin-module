@@ -7,7 +7,7 @@ package io.surati.gap.admin.web.pages;
  *
  * @since 0.1
  */
-import io.surati.gap.admin.web.server.RsPage;
+import io.surati.gap.web.base.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

@@ -25,8 +25,8 @@ package io.surati.gap.admin.web.pages;
 
 import io.surati.gap.admin.api.Profile;
 import io.surati.gap.admin.db.DbProfiles;
-import io.surati.gap.admin.web.server.RsPage;
 import io.surati.gap.admin.web.xe.XeProfile;
+import io.surati.gap.web.base.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

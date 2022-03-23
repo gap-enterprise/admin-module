@@ -29,6 +29,7 @@ import io.surati.gap.admin.db.DbUsers;
 import io.surati.gap.admin.api.Log;
 import io.surati.gap.admin.api.User;
 import io.surati.gap.admin.api.Users;
+import io.surati.gap.web.base.log.RqLog;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
@@ -68,7 +69,7 @@ public final class TkAuthenticate implements Take {
 	
 	@Override
 	public Response act(Request req) throws Exception {
-		final Log log = new DbLog(this.source, req);
+		final Log log = new RqLog(this.source, req);
 		final RqFormSmart form = new RqFormSmart(new RqGreedy(req));		
 		final String login = form.single("login");
 		final String password = form.single("password");
