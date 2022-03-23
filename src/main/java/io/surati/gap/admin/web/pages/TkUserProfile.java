@@ -24,10 +24,10 @@ SOFTWARE.
 package io.surati.gap.admin.web.pages;
 
 import io.surati.gap.admin.api.User;
-import io.surati.gap.admin.rq.RqUser;
-import io.surati.gap.admin.web.server.RsPage;
 import io.surati.gap.admin.web.xe.XeUser;
-import io.surati.gap.commons.web.xe.XeRootPage;
+import io.surati.gap.web.base.RsPage;
+import io.surati.gap.web.base.rq.RqUser;
+import io.surati.gap.web.base.xe.XeRootPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

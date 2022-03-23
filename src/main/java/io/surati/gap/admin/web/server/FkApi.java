@@ -1,9 +1,9 @@
 package io.surati.gap.admin.web.server;
 
 import com.minlessika.db.Database;
-import io.surati.gap.admin.web.TkSecure;
 import io.surati.gap.admin.web.rest.TkEventLogSearch;
 import io.surati.gap.admin.web.rest.TkUserSearch;
+import io.surati.gap.web.base.TkSecure;
 import org.takes.facets.fork.FkChain;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.FkWrap;

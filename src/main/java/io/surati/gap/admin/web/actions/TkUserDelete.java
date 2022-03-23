@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import io.surati.gap.admin.db.DbUsers;
 import io.surati.gap.admin.api.User;
 import io.surati.gap.admin.api.Users;
-import io.surati.gap.admin.rq.RqUser;
+import io.surati.gap.web.base.rq.RqUser;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;

@@ -2,8 +2,6 @@ package io.surati.gap.admin.web.server;
 
 import com.minlessika.db.Database;
 import com.minlessika.db.TkTransaction;
-import io.surati.gap.admin.web.TkAnonymous;
-import io.surati.gap.admin.web.TkSecure;
 import io.surati.gap.admin.web.actions.TkAccessRightDelete;
 import io.surati.gap.admin.web.actions.TkAccessRightSave;
 import io.surati.gap.admin.web.actions.TkAuthenticate;
@@ -19,6 +17,8 @@ import io.surati.gap.admin.web.actions.TkUserNameUpdate;
 import io.surati.gap.admin.web.actions.TkUserPasswordForceChange;
 import io.surati.gap.admin.web.actions.TkUserPasswordUpdate;
 import io.surati.gap.admin.web.actions.TkUserSave;
+import io.surati.gap.web.base.TkAnonymous;
+import io.surati.gap.web.base.TkSecure;
 import org.takes.facets.auth.Pass;
 import org.takes.facets.fork.FkChain;
 import org.takes.facets.fork.FkRegex;

@@ -23,7 +23,7 @@ SOFTWARE.
  */
 package io.surati.gap.admin.web.pages;
 
-import io.surati.gap.admin.web.server.RsPage;
+import io.surati.gap.web.base.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

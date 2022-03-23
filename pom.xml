@@ -100,6 +100,7 @@ SOFTWARE.
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.200</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -116,6 +117,7 @@ SOFTWARE.
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
       <version>4.9.0</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -141,6 +143,7 @@ SOFTWARE.
       <groupId>com.baudoliver7</groupId>
       <artifactId>lightweight-db</artifactId>
       <version>0.4</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.llorllale</groupId>
@@ -152,21 +155,6 @@ SOFTWARE.
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>4.0.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>jooq</artifactId>
-      <version>${jooq.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>jooq-meta</artifactId>
-      <version>${jooq.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>jooq-codegen</artifactId>
-      <version>${jooq.version}</version>
     </dependency>
     <dependency>
       <groupId>com.baudoliver7</groupId>
@@ -181,17 +169,12 @@ SOFTWARE.
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>commons-utils</artifactId>
-      <version>0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>io.surati.gap</groupId>
-      <artifactId>commons-web</artifactId>
       <version>0.2</version>
     </dependency>
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>web-base</artifactId>
-      <version>0.3.1</version>
+      <version>0.4</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.saxon</groupId>
@@ -205,6 +188,11 @@ SOFTWARE.
       <version>9.1.0.8</version>
       <classifier>dom</classifier>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.surati.gap</groupId>
+      <artifactId>admin-base</artifactId>
+      <version>0.1</version>
     </dependency>
   </dependencies>
   <build>

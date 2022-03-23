@@ -16,9 +16,10 @@ import io.surati.gap.admin.db.DbLog;
 import io.surati.gap.admin.db.DbUsers;
 import io.surati.gap.admin.api.Log;
 import io.surati.gap.admin.api.User;
-import io.surati.gap.admin.rq.RqUser;
 import io.surati.gap.commons.utils.convert.RqFilename;
-import io.surati.gap.commons.web.rq.RootPageUri;
+import io.surati.gap.web.base.log.RqLog;
+import io.surati.gap.web.base.rq.RootPageUri;
+import io.surati.gap.web.base.rq.RqUser;
 import org.apache.commons.io.FilenameUtils;
 import org.cactoos.text.TextOf;
 import org.takes.Request;
@@ -52,7 +53,7 @@ public final class TkUserAvatarSave implements Take {
 	
 	@Override
 	public Response act(Request req) throws Exception {
-		final Log log = new DbLog(this.source, req);
+		final Log log = new RqLog(this.source, req);
 		final RqGreedy rqg = new RqGreedy(req);
 		final RqMtSmart mt = new RqMtSmart(rqg);					        
 		final Request rqimage = mt.single("avatar");

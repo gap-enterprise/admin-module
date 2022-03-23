@@ -23,13 +23,13 @@ SOFTWARE.
  */  
 package io.surati.gap.admin.web.actions;
 
-import io.surati.gap.admin.db.DbLog;
 import io.surati.gap.admin.db.DbProfileAccesses;
 import io.surati.gap.admin.db.DbProfiles;
 import io.surati.gap.admin.api.Access;
 import io.surati.gap.admin.api.Log;
 import io.surati.gap.admin.api.Profile;
 import io.surati.gap.admin.api.ProfileAccesses;
+import io.surati.gap.web.base.log.RqLog;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
@@ -65,7 +65,7 @@ public final class TkAccessRightDelete implements Take {
 	
 	@Override
 	public Response act(Request req) throws Exception {
-		final Log log = new DbLog(this.source, req);
+		final Log log = new RqLog(this.source, req);
 		final Access access = Access.valueOf(new RqHref.Smart(req).single("id"));
 		final Long profile_id = Long.parseLong(new RqHref.Smart(req).single("profile", "0"));
 		final Profile profile = new DbProfiles(this.source).get(profile_id);

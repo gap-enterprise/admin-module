@@ -25,6 +25,7 @@ package io.surati.gap.admin.web.actions;
 
 import io.surati.gap.admin.db.DbLog;
 import io.surati.gap.admin.api.Log;
+import io.surati.gap.web.base.log.RqLog;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
@@ -58,7 +59,7 @@ public final class TkLogout implements Take {
 	
 	@Override
 	public Response act(Request req) throws Exception {
-		final Log log = new DbLog(this.source, req);
+		final Log log = new RqLog(this.source, req);
 		log.info("Déconnexion effectuée avec succès !");
 		return new RsForward(	
 			new RsFlash("Déconnexion effectuée avec succès !", Level.INFO),
