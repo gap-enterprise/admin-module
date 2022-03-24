@@ -25,12 +25,12 @@ package io.surati.gap.admin.web.server;
 
 import com.minlessika.db.BasicDatabase;
 import com.minlessika.db.Database;
-import com.minlessika.db.DatabaseLiquibaseUpdate;
 import com.minlessika.utils.ConsoleArgs;
 import com.minlessika.utils.PreviousLocation;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.surati.gap.admin.codec.SCodec;
+import io.surati.gap.admin.db.AdminDatabaseBuiltWithLiquibase;
 import io.surati.gap.web.base.FkMimes;
 import io.surati.gap.web.base.TkAuth;
 import io.surati.gap.web.base.TkSafeUserAlert;
@@ -112,12 +112,16 @@ public final class Main {
 			psize = Integer.parseInt(argsMap.get("db-pool-size"));
 		}
 		configdb.setMaximumPoolSize(psize);
-        final DataSource source = new HikariDataSource(configdb);
-		final Database database = new DatabaseLiquibaseUpdate(
-			new BasicDatabase(source),
-			"io/surati/gap/admin/liquibase/db-admin.changelog-master.xml"
-		);		
-		database.start();
+		final DataSource source = new HikariDataSource(configdb);
+		final Database database = new BasicDatabase(source);
+		try {
+			database.startTransaction();
+			new AdminDatabaseBuiltWithLiquibase(database);
+			database.terminateTransaction();
+		} catch (final Exception exe) {
+			database.rollback();
+			throw exe;
+		}
 		final Pass pass = new PsChain(
 			new PsByFlag(
 				new PsByFlag.Pair(
@@ -144,8 +148,9 @@ public final class Main {
 										new FkPages(database),
 										new FkApi(database)
 									)
-								)
-								, pass)
+								),
+								pass
+							)
 						)
 					)
 				)
@@ -210,15 +215,15 @@ public final class Main {
                     	final String message = fullMessage.split("\\[400\\]")[1].trim();
                     	if(message.startsWith("IllEg:")) {                    		
                     		String url = new PreviousLocation(req, "/home").toString();
-                        	return new Opt.Single<Response>(
-                				new RsForward(
-                					new RsFlash(
-                						message.replaceFirst("IllEg:", ""),
-            							Level.WARNING
-                					),
-                					url
-                    			)                   				
-                		    );
+                        	return new Opt.Single<>(
+								new RsForward(
+									new RsFlash(
+										message.replaceFirst("IllEg:", ""),
+										Level.WARNING
+									),
+									url
+								)
+							);
                     	} else {
                     		return new Opt.Single<>(
             					new RsWithStatus(
