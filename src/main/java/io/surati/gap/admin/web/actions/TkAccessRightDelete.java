@@ -66,12 +66,12 @@ public final class TkAccessRightDelete implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		final Log log = new RqLog(this.source, req);
-		final Access access = Access.valueOf(new RqHref.Smart(req).single("id"));
+		final Access access = Access.get(new RqHref.Smart(req).single("id"));
 		final Long profile_id = Long.parseLong(new RqHref.Smart(req).single("profile", "0"));
 		final Profile profile = new DbProfiles(this.source).get(profile_id);
 		final ProfileAccesses items = new DbProfileAccesses(this.source, profile);
 		items.remove(access);
-		log.info("Suppression de l'accès (%s) du profil (%s)", access.name(), profile.toString());
+		log.info("Suppression de l'accès (%s) du profil (%s)", access.code(), profile.toString());
 		return new RsForward(
 			new RsFlash(
 					String.format("Le droit d'accès du profil %s a été supprimé avec succès !", profile.name()),

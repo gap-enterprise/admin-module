@@ -71,7 +71,7 @@ public class TkAccessRightAdd implements Take  {
 		final Collection<Access> accesses = new LinkedList<>();
 		final Profile profile = new DbProfiles(this.source).get(profile_id);
 		
-		for (Access access : Access.values()) {
+		for (Access access : Access.VALUES) {
 			if(!profile.accesses().has(access)) {
 				accesses.add(access);
 			}

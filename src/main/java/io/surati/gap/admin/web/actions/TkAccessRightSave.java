@@ -78,9 +78,9 @@ public final class TkAccessRightSave implements Take {
 			if(name.startsWith("access-")) {
 				final boolean ischecked = Boolean.parseBoolean(form.single(name));
 				if(ischecked) {
-					final Access access = Access.valueOf(name.split("-")[1].toUpperCase());
+					final Access access = Access.get(name.split("-")[1].toUpperCase());
 					items.add(access);
-					accadded.add(access.name());
+					accadded.add(access.code());
 				}
 			}
 		}
