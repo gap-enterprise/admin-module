@@ -16,7 +16,13 @@
  */
 package io.surati.gap.admin;
 
+import io.surati.gap.admin.api.Access;
 import io.surati.gap.admin.api.Module;
+import io.surati.gap.admin.secure.AdminAccess;
+import io.surati.gap.web.base.menu.Menu;
+import io.surati.gap.web.base.menu.SimpleMenu;
+import io.surati.gap.web.base.menu.SimpleSubmenu;
+import org.cactoos.iterable.IterableOf;
 
 /**
  * Admin module.
@@ -30,11 +36,55 @@ public enum AdminModule implements Module {
 		"Ce module permet de gérer les utilisateurs, leurs profils, les droits d'accès, etc."
 	);
 
-	static {
+	public static void setup() {
 		for (Module mod : AdminModule.values()) {
 			Module.VALUES.add(mod);
 			Module.BY_CODE.put(mod.code(), mod);
 		}
+		Menu.VALUES.add(
+			new SimpleMenu(
+				1000,
+				"lnr-cog",
+				"Administration",
+				"bg-danger",
+				"Gérer la sécurité, l'audit, etc.",
+				new IterableOf<>(
+					new SimpleSubmenu(
+						1, "lnr-user", "Utilisateurs", "/user",
+						new IterableOf<>(
+							AdminAccess.VISUALISER_UTILISATEURS,
+							AdminAccess.CONFIGURER_UTILISATEURS,
+							AdminAccess.BLOQUER_UTILISATEURS,
+							AdminAccess.CHANGER_MOT_DE_PASSE_UTILISATEURS
+						),
+						false
+					),
+					new SimpleSubmenu(
+						2, "lnr-license", "Profils", "/profile",
+						new IterableOf<>(
+							AdminAccess.VISUALISER_PROFILS,
+							AdminAccess.CONFIGURER_PROFILS
+						),
+						false
+					),
+					new SimpleSubmenu(
+						3, "lnr-database", "Entreprise", "/enterprise",
+						new IterableOf<>(
+							AdminAccess.VISUALISER_INFO_ENTREPRISE,
+							AdminAccess.CONFIGURER_INFO_ENTREPRISE
+						),
+						false
+					),
+					new SimpleSubmenu(
+						4, "lnr-layers", "Journalisation", "/event-log",
+						new IterableOf<>(
+							AdminAccess.VISUALISER_LA_JOURNALISATION
+						),
+						false
+					)
+				)
+			)
+		);
 	}
 
 	/**
