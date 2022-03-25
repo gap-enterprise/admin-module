@@ -29,6 +29,7 @@ import com.minlessika.utils.ConsoleArgs;
 import com.minlessika.utils.PreviousLocation;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import io.surati.gap.admin.AdminModule;
 import io.surati.gap.admin.codec.SCodec;
 import io.surati.gap.admin.db.AdminDatabaseBuiltWithLiquibase;
 import io.surati.gap.web.base.FkMimes;
@@ -122,6 +123,7 @@ public final class Main {
 			database.rollback();
 			throw exe;
 		}
+		AdminModule.setup();
 		final Pass pass = new PsChain(
 			new PsByFlag(
 				new PsByFlag.Pair(
