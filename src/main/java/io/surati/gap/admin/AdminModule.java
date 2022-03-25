@@ -19,6 +19,7 @@ package io.surati.gap.admin;
 import io.surati.gap.admin.api.Access;
 import io.surati.gap.admin.api.Module;
 import io.surati.gap.admin.secure.AdminAccess;
+import io.surati.gap.web.base.menu.DashboardMenu;
 import io.surati.gap.web.base.menu.Menu;
 import io.surati.gap.web.base.menu.SimpleMenu;
 import io.surati.gap.web.base.menu.SimpleSubmenu;
@@ -37,9 +38,12 @@ public enum AdminModule implements Module {
 	);
 
 	public static void setup() {
-		for (Module mod : AdminModule.values()) {
+		for (final Module mod : AdminModule.values()) {
 			Module.VALUES.add(mod);
 			Module.BY_CODE.put(mod.code(), mod);
+		}
+		for (final DashboardMenu dmenu : AdminDashboardMenu.values()) {
+			DashboardMenu.VALUES.add(dmenu);
 		}
 		Menu.VALUES.add(
 			new SimpleMenu(
