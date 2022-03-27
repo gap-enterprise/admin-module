@@ -174,7 +174,7 @@ SOFTWARE.
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>web-base</artifactId>
-      <version>0.6</version>
+      <version>0.6.1</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.saxon</groupId>
@@ -192,7 +192,7 @@ SOFTWARE.
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>admin-base</artifactId>
-      <version>0.3</version>
+      <version>0.4.2</version>
     </dependency>
   </dependencies>
   <build>
@@ -237,31 +237,6 @@ SOFTWARE.
   </build>
   <profiles>
     <profile>
-      <!--JOOQ generates the DB model classes for us-->
-      <id>jooqGen</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <id>jooq-codegen</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>java</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <mainClass>io.surati.gap.admin.jooq.JooqGen</mainClass>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>qulice</id>
       <build>
         <plugins>
@@ -272,7 +247,6 @@ SOFTWARE.
             <configuration>
               <excludes>
                 <exclude>xml:.*</exclude>
-                <exclude>java:./src/main/java/io/surati/gap/admin/module/jooq/generated/*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
                 <exclude>dependencies:.*</exclude>
               </excludes>
@@ -313,7 +287,7 @@ SOFTWARE.
               </execution>
             </executions>
             <configuration>
-              <mainClass>io.surati.gap.admin.web.server.Main</mainClass>
+              <mainClass>io.surati.gap.admin.module.web.server.Main</mainClass>
               <!-- your main class -->
               <cleanupDaemonThreads>false</cleanupDaemonThreads>
               <arguments>
