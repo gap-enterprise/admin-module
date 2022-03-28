@@ -10,12 +10,11 @@ package io.surati.gap.admin.module.web.actions;
 import javax.sql.DataSource;
 import java.io.InputStream;
 import java.util.logging.Level;
-
-import io.surati.gap.admin.module.codec.GIdentity;
 import io.surati.gap.admin.base.db.DbUsers;
 import io.surati.gap.admin.base.api.Log;
 import io.surati.gap.admin.base.api.User;
 import io.surati.gap.commons.utils.convert.RqFilename;
+import io.surati.gap.web.base.auth.GIdentity;
 import io.surati.gap.web.base.log.RqLog;
 import io.surati.gap.web.base.rq.RootPageUri;
 import io.surati.gap.web.base.rq.RqUser;

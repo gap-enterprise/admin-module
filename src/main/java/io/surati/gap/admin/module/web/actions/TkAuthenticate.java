@@ -23,11 +23,11 @@ SOFTWARE.
  */
 package io.surati.gap.admin.module.web.actions;
 
-import io.surati.gap.admin.module.codec.GIdentity;
 import io.surati.gap.admin.base.db.DbUsers;
 import io.surati.gap.admin.base.api.Log;
 import io.surati.gap.admin.base.api.User;
 import io.surati.gap.admin.base.api.Users;
+import io.surati.gap.web.base.auth.GIdentity;
 import io.surati.gap.web.base.log.RqLog;
 import org.takes.Request;
 import org.takes.Response;
