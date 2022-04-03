@@ -75,14 +75,14 @@ public final class TkUserSave implements Take {
 		final Profile profile = new DbProfiles(this.source).get(profile_id);
 		if(id.equals(0L)) {
 			final String login = form.single("login");
-			item = items.register(name, login, password);
+			item = items.register(name, login, password, profile);
 			msg = String.format("L'utilisateur %s a été créé avec succès !", name);
 		} else {
 			item = items.get(id);
 			item.update(item.login(), name);
+			item.assign(profile);
 			msg = String.format("L'utilisateur %s a été modifié avec succès !", name);
 		}
-		item.assign(profile);
 		return new RsForward(
 			new RsFlash(
 				msg,

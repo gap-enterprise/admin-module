@@ -29,6 +29,7 @@ import com.minlessika.utils.ConsoleArgs;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.surati.gap.admin.base.db.AdminDatabaseBuiltWithLiquibase;
+import io.surati.gap.admin.base.db.AdminDemoDatabase;
 import io.surati.gap.admin.module.AdminModule;
 import io.surati.gap.web.base.FkMimes;
 import io.surati.gap.web.base.TkSafe;
@@ -84,7 +85,7 @@ public final class Main {
 		configdb.setMaximumPoolSize(psize);
 		final DataSource source = new HikariDataSource(configdb);
 		final Database database = new BasicDatabase(
-			new AdminDatabaseBuiltWithLiquibase(source)
+			new AdminDemoDatabase(source)
 		);
 		AdminModule.setup();
 		final Pass pass = new PsChain(
