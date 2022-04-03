@@ -82,7 +82,7 @@ public class TkAccessRightAdd implements Take  {
 			new XeAccesses(accesses)
 		);
 		return new RsPage(
-			"/xsl/access_right_profile/add.xsl", 
+			"/io/surati/gap/admin/module/xsl/access_right_profile/add.xsl",
 			req,
 			this.source,
 			() -> new Sticky<>(
