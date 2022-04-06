@@ -23,19 +23,19 @@ SOFTWARE.
  */
 package io.surati.gap.admin.module.web.server;
 
-import com.minlessika.db.BasicDatabase;
-import com.minlessika.db.Database;
+import com.baudoliver7.jdbc.toolset.lockable.LocalLockedDataSource;
 import com.minlessika.utils.ConsoleArgs;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import io.surati.gap.admin.base.db.AdminDatabaseBuiltWithLiquibase;
 import io.surati.gap.admin.base.db.AdminDemoDatabase;
 import io.surati.gap.admin.module.AdminModule;
 import io.surati.gap.web.base.FkMimes;
 import io.surati.gap.web.base.TkSafe;
 import io.surati.gap.web.base.TkSafeUserAlert;
+import io.surati.gap.web.base.TkTransaction;
 import io.surati.gap.web.base.auth.SCodec;
 import io.surati.gap.web.base.auth.TkAuth;
+import java.sql.Connection;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.commons.lang3.StringUtils;
@@ -58,35 +58,33 @@ import org.takes.tk.TkSlf4j;
  * @since 0.1
  */
 public final class Main {
-	
+
+	/**
+	 * Local connectioin.
+	 */
+	private static final ThreadLocal<Connection> localconn = new ThreadLocal<>();
+
 	/**
 	 * App entry
 	 * @param args Arguments
 	 * @throws Exception If some problems in
 	 */
 	public static void main(String[] args) throws Exception {		
-		final Map<String, String> argsMap = new ConsoleArgs("--", args).asMap();
-        final String dbname = argsMap.get("db-name");
-        final String dbport = argsMap.get("db-port");
-        final String dbhost = argsMap.get("db-host");
-        final String user = argsMap.get("db-user");
-        final String password = argsMap.get("db-password");
-		final String url = String.format("jdbc:postgresql://%s:%s/%s", dbhost, dbport, dbname);
-		final String driver = argsMap.get("driver");	
-		final HikariConfig configdb = new HikariConfig();
-		configdb.setDriverClassName(driver);
-		configdb.setJdbcUrl(url);
-		configdb.setUsername(user);
-		configdb.setPassword(password);
+		final Map<String, String> map = new ConsoleArgs("--", args).asMap();
+		final HikariConfig config = new HikariConfig();
+		config.setDriverClassName(map.get("db-driver"));
+		config.setJdbcUrl(map.get("db-url"));
+		config.setUsername(map.get("db-user"));
+		config.setPassword(map.get("db-password"));
 		int psize = 5;
-		if(StringUtils.isNotBlank(argsMap.get("db-pool-size"))) {
-			psize = Integer.parseInt(argsMap.get("db-pool-size"));
+		if(StringUtils.isNotBlank(map.get("db-pool-size"))) {
+			psize = Integer.parseInt(map.get("db-pool-size"));
 		}
-		configdb.setMaximumPoolSize(psize);
-		final DataSource source = new HikariDataSource(configdb);
-		final Database database = new BasicDatabase(
-			new AdminDemoDatabase(source)
+		config.setMaximumPoolSize(psize);
+		final DataSource src = new AdminDemoDatabase(
+			new HikariDataSource(config)
 		);
+		final DataSource lcksrc = new LocalLockedDataSource(src, Main.localconn);
 		AdminModule.setup();
 		final Pass pass = new PsChain(
 			new PsByFlag(
@@ -106,13 +104,16 @@ public final class Main {
 						new TkFlash(
 							new TkAuth(
 								new TkSafeUserAlert(
-									source,
-									new TkFork(
-										new FkMimes(),
-										new FkRegex("/robots\\.txt", ""),
-										new FkActions(database, pass),
-										new FkPages(database),
-										new FkApi(database)
+									src,
+									new TkTransaction(
+										new TkFork(
+											new FkMimes(),
+											new FkRegex("/robots\\.txt", ""),
+											new FkActions(lcksrc, pass),
+											new FkPages(lcksrc),
+											new FkApi(lcksrc)
+										),
+										Main.localconn
 									)
 								),
 								pass

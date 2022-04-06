@@ -1,7 +1,5 @@
 package io.surati.gap.admin.module.web.server;
 
-import com.minlessika.db.Database;
-import com.minlessika.db.TkTransaction;
 import io.surati.gap.admin.module.web.actions.TkAccessRightDelete;
 import io.surati.gap.admin.module.web.actions.TkAccessRightSave;
 import io.surati.gap.admin.module.web.actions.TkAuthenticate;
@@ -19,6 +17,7 @@ import io.surati.gap.admin.module.web.actions.TkUserPasswordUpdate;
 import io.surati.gap.admin.module.web.actions.TkUserSave;
 import io.surati.gap.web.base.TkAnonymous;
 import io.surati.gap.web.base.TkSecure;
+import javax.sql.DataSource;
 import org.takes.facets.auth.Pass;
 import org.takes.facets.fork.FkChain;
 import org.takes.facets.fork.FkRegex;
@@ -31,10 +30,7 @@ import org.takes.facets.fork.FkWrap;
  */
 public final class FkActions extends FkWrap {
 
-	public FkActions(
-		final Database source,
-		final Pass pass
-	) {
+	public FkActions(final DataSource source, final Pass pass) {
 		super(
 			new FkChain(
 					new FkRegex(
@@ -60,90 +56,63 @@ public final class FkActions extends FkWrap {
 					new FkRegex(
 						"/user-profile/update-change-password", 
 						new TkSecure(
-							new TkTransaction(
-								new TkUserPasswordUpdate(source),
-								source
-							),
+							new TkUserPasswordUpdate(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/user/save", 
 						new TkSecure(
-							new TkTransaction(
-								new TkUserSave(source),
-								source
-							),
+							new TkUserSave(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/user/delete",
 						new TkSecure(
-							new TkTransaction(
-								new TkUserDelete(source),
-								source
-							),
+							new TkUserDelete(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/user/block",
 						new TkSecure(
-							new TkTransaction(
-								new TkUserBlock(source),
-								source
-							),
+							new TkUserBlock(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/user/update-password",
 						new TkSecure(
-							new TkTransaction(
-								new TkUserPasswordForceChange(source),
-								source
-							),
+							new TkUserPasswordForceChange(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/profile/save", 
 						new TkSecure(
-							new TkTransaction(
-								new TkProfileSave(source),
-								source
-							),
+							new TkProfileSave(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/profile/delete",
 						new TkSecure(
-							new TkTransaction(
-								new TkProfileDelete(source),
-								source
-							),
+							new TkProfileDelete(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/access-right/save", 
 						new TkSecure(
-							new TkTransaction(
-								new TkAccessRightSave(source),
-								source
-							),
+							new TkAccessRightSave(source),
 							source
 						)
 					),
 					new FkRegex(
 						"/access-right/delete",
 						new TkSecure(
-							new TkTransaction(
-								new TkAccessRightDelete(source),
-								source
-							),
+							new TkAccessRightDelete(source),
 							source
 						)
 					),
@@ -164,10 +133,7 @@ public final class FkActions extends FkWrap {
 					new FkRegex(
 						"/enterprise/logo/save",
 						new TkSecure(
-							new TkTransaction(
-								new TkEnterpriseLogoSave(source),
-								source
-							),
+							new TkEnterpriseLogoSave(source),
 							source
 						)
 					)
