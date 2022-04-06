@@ -1,9 +1,9 @@
 package io.surati.gap.admin.module.web.server;
 
-import com.minlessika.db.Database;
 import io.surati.gap.admin.module.web.rest.TkEventLogSearch;
 import io.surati.gap.admin.module.web.rest.TkUserSearch;
 import io.surati.gap.web.base.TkSecure;
+import javax.sql.DataSource;
 import org.takes.facets.fork.FkChain;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.FkWrap;
@@ -15,7 +15,7 @@ import org.takes.facets.fork.FkWrap;
  */
 public final class FkApi extends FkWrap {
 
-	public FkApi(final Database source) {
+	public FkApi(final DataSource source) {
 		super(
 			new FkChain(
 				new FkRegex(

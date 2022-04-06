@@ -1,28 +1,28 @@
 package io.surati.gap.admin.module.web.server;
 
-import com.minlessika.db.Database;
-import io.surati.gap.admin.module.web.pages.TkIndex;
-import io.surati.gap.admin.module.web.pages.TkLogin;
-import io.surati.gap.admin.module.web.pages.TkProfileList;
-import io.surati.gap.admin.module.web.pages.TkUserAvatarEdit;
-import io.surati.gap.admin.module.web.pages.TkUserEdit;
-import io.surati.gap.admin.module.web.pages.TkUserList;
-import io.surati.gap.admin.module.web.pages.TkUserProfileEditPassword;
 import io.surati.gap.admin.module.web.pages.TkAccessRightAdd;
 import io.surati.gap.admin.module.web.pages.TkEnterprise;
 import io.surati.gap.admin.module.web.pages.TkEnterpriseEdit;
 import io.surati.gap.admin.module.web.pages.TkEnterpriseLogoEdit;
 import io.surati.gap.admin.module.web.pages.TkEventLogList;
 import io.surati.gap.admin.module.web.pages.TkEventLogView;
+import io.surati.gap.admin.module.web.pages.TkIndex;
+import io.surati.gap.admin.module.web.pages.TkLogin;
 import io.surati.gap.admin.module.web.pages.TkProfileEdit;
+import io.surati.gap.admin.module.web.pages.TkProfileList;
 import io.surati.gap.admin.module.web.pages.TkProfileView;
+import io.surati.gap.admin.module.web.pages.TkUserAvatarEdit;
+import io.surati.gap.admin.module.web.pages.TkUserEdit;
 import io.surati.gap.admin.module.web.pages.TkUserEditPassword;
+import io.surati.gap.admin.module.web.pages.TkUserList;
 import io.surati.gap.admin.module.web.pages.TkUserProfile;
+import io.surati.gap.admin.module.web.pages.TkUserProfileEditPassword;
 import io.surati.gap.admin.module.web.pages.TkUserView;
 import io.surati.gap.web.base.TkAnonymous;
 import io.surati.gap.web.base.TkDashboardBlank;
 import io.surati.gap.web.base.TkHome;
 import io.surati.gap.web.base.TkSecure;
+import javax.sql.DataSource;
 import org.takes.facets.fork.FkChain;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.FkWrap;
@@ -34,9 +34,7 @@ import org.takes.facets.fork.FkWrap;
  */
 public final class FkPages extends FkWrap {
 
-	public FkPages(
-		final Database source
-	) {
+	public FkPages(final DataSource source) {
 		super(
 			new FkChain(
 				new FkRegex(

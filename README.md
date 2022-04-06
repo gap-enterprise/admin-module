@@ -19,3 +19,11 @@ Module `Admin` is used to configure :
 
 We also manage user authentication and authorization.
 
+# How to run the project
+Firstly, you must create a PostgreSQL database (`db_gap` by example) and host it at a PostgreSQL instance (reachable locally by example at port `5070`).
+
+Then, you can run the application at port `9090` with Maven like this:
+```shell
+mvn clean integration-test -Phit-refresh -Dport=9090 -Ddb.driver=org.postgresql.Driver -Ddb.url=jdbc:postgresql://127.0.0.1:5070/db_gap -Ddb.user=gap -Ddb.password=admin --threads=10
+```
+
