@@ -47,13 +47,14 @@ public enum AdminModule implements Module {
 		Menu.VALUES.add(
 			new SimpleMenu(
 				1000,
+				"admin",
 				"lnr-cog",
 				"Administration",
 				"bg-danger",
 				"Gérer la sécurité, l'audit, etc.",
 				new IterableOf<>(
 					new SimpleSubmenu(
-						1, "lnr-user", "Utilisateurs", "/user",
+						1, "users", "lnr-user", "Utilisateurs", "/user",
 						new IterableOf<>(
 							AdminAccess.VISUALISER_UTILISATEURS,
 							AdminAccess.CONFIGURER_UTILISATEURS,
@@ -63,7 +64,7 @@ public enum AdminModule implements Module {
 						false
 					),
 					new SimpleSubmenu(
-						2, "lnr-license", "Profils", "/profile",
+						2, "profile", "lnr-license", "Profils", "/profile",
 						new IterableOf<>(
 							AdminAccess.VISUALISER_PROFILS,
 							AdminAccess.CONFIGURER_PROFILS
@@ -71,7 +72,7 @@ public enum AdminModule implements Module {
 						false
 					),
 					new SimpleSubmenu(
-						3, "lnr-database", "Entreprise", "/enterprise",
+						3, "enterprise", "lnr-database", "Entreprise", "/enterprise",
 						new IterableOf<>(
 							AdminAccess.VISUALISER_INFO_ENTREPRISE,
 							AdminAccess.CONFIGURER_INFO_ENTREPRISE
@@ -79,7 +80,7 @@ public enum AdminModule implements Module {
 						false
 					),
 					new SimpleSubmenu(
-						4, "lnr-layers", "Journalisation", "/event-log",
+						4, "event-log", "lnr-layers", "Journalisation", "/event-log",
 						new IterableOf<>(
 							AdminAccess.VISUALISER_LA_JOURNALISATION
 						),
