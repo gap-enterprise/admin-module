@@ -23,6 +23,7 @@ SOFTWARE.
  */ 
 package io.surati.gap.admin.module.web.pages;
 
+import io.surati.gap.admin.module.web.server.RsPage;
 import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -30,7 +31,6 @@ import java.util.LinkedList;
 import io.surati.gap.admin.base.db.DbProfiles;
 import io.surati.gap.admin.base.api.Access;
 import io.surati.gap.admin.base.api.Profile;
-import io.surati.gap.web.base.RsPage;
 import io.surati.gap.web.base.xe.XeAccesses;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;

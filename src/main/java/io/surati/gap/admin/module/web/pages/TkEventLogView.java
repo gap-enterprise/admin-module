@@ -10,7 +10,7 @@ package io.surati.gap.admin.module.web.pages;
 import io.surati.gap.admin.base.api.EventLog;
 import io.surati.gap.admin.base.db.DbEventLogs;
 import io.surati.gap.admin.module.web.xe.XeEventLog;
-import io.surati.gap.web.base.RsPage;
+import io.surati.gap.admin.module.web.server.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

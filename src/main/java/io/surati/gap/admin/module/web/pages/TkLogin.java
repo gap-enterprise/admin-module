@@ -23,12 +23,14 @@ SOFTWARE.
  */
 package io.surati.gap.admin.module.web.pages;
 
-import io.surati.gap.web.base.RsPage;
+import io.surati.gap.admin.module.web.server.RsPage;
+import org.cactoos.list.Sticky;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
 
 import javax.sql.DataSource;
+import org.takes.rs.xe.XeSource;
 
 /**
  * Take index.
@@ -50,7 +52,8 @@ public final class TkLogin implements Take {
 		return new RsPage(
 			"/io/surati/gap/admin/module/xsl/login.xsl",
 			req,
-			this.source
+			this.source,
+			() -> new Sticky<>()
 		);
 	}
 

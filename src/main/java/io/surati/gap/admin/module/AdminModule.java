@@ -23,6 +23,7 @@ import io.surati.gap.web.base.menu.Menu;
 import io.surati.gap.web.base.menu.SimpleMenu;
 import io.surati.gap.web.base.menu.SimpleSubmenu;
 import org.cactoos.iterable.IterableOf;
+import org.pf4j.Plugin;
 
 /**
  * Admin module.
@@ -37,10 +38,8 @@ public enum AdminModule implements Module {
 	);
 
 	public static void setup() {
-		for (final Module mod : AdminModule.values()) {
-			Module.VALUES.add(mod);
-			Module.BY_CODE.put(mod.code(), mod);
-		}
+		Module.VALUES.add(ADMIN);
+		Module.BY_CODE.put(ADMIN.code(), ADMIN);
 		for (final DashboardMenu dmenu : AdminDashboardMenu.values()) {
 			DashboardMenu.VALUES.add(dmenu);
 		}

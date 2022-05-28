@@ -29,7 +29,7 @@ import io.surati.gap.admin.base.prop.PropCompany;
 
 import javax.sql.DataSource;
 
-import io.surati.gap.web.base.RsPage;
+import io.surati.gap.admin.module.web.server.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;
