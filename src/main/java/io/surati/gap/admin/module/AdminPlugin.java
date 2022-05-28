@@ -24,17 +24,17 @@ public final class AdminPlugin extends Plugin {
 
     @Override
     public void start() {
-        System.out.println("Starting Administration plugin...");
+        System.out.println("Starting Administration module...");
     }
 
     @Override
     public void stop() {
-        System.out.println("Stopping Administration plugin...");
+        System.out.println("Stopping Administration module...");
     }
 
     @Override
     public void delete() {
-        System.out.println("Deleting Administration plugin...");
+        System.out.println("Deleting Administration module...");
     }
 
     @Extension

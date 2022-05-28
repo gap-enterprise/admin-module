@@ -213,7 +213,7 @@ SOFTWARE.
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             </manifest>
             <manifestEntries>
-              <Plugin-Id>admin-plugin</Plugin-Id>
+              <Plugin-Id>admin-module</Plugin-Id>
               <Plugin-Version>${project.version}</Plugin-Version>
               <Plugin-Provider>Surati</Plugin-Provider>
               <Plugin-Class>io.surati.gap.admin.module.AdminPlugin</Plugin-Class>

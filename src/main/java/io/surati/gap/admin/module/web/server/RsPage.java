@@ -5,7 +5,6 @@ import io.surati.gap.web.base.InClasspath;
 import java.io.IOException;
 import javax.sql.DataSource;
 import org.takes.Request;
-import org.takes.Response;
 import org.takes.Scalar;
 import org.takes.rs.RsWrap;
 import org.takes.rs.xe.XeSource;
