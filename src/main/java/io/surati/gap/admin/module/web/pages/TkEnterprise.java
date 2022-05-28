@@ -27,7 +27,7 @@ import io.surati.gap.admin.base.api.ReferenceDocumentType;
 import io.surati.gap.admin.base.api.Company;
 import io.surati.gap.admin.module.web.xe.XeReferenceDocumentType;
 import io.surati.gap.admin.base.prop.PropCompany;
-import io.surati.gap.web.base.RsPage;
+import io.surati.gap.admin.module.web.server.RsPage;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;
 import org.takes.Response;

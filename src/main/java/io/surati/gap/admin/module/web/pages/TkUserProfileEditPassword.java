@@ -25,7 +25,7 @@ package io.surati.gap.admin.module.web.pages;
 
 import io.surati.gap.admin.base.api.User;
 import io.surati.gap.admin.module.web.xe.XeUser;
-import io.surati.gap.web.base.RsPage;
+import io.surati.gap.admin.module.web.server.RsPage;
 import io.surati.gap.web.base.rq.RqUser;
 import org.cactoos.iterable.Sticky;
 import org.takes.Request;

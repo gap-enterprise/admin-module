@@ -158,12 +158,12 @@ SOFTWARE.
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>commons-utils</artifactId>
-      <version>0.3.1</version>
+      <version>0.5.0</version>
     </dependency>
     <dependency>
       <groupId>io.surati.gap</groupId>
       <artifactId>web-base</artifactId>
-      <version>0.8.4</version>
+      <version>0.8.5</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.saxon</groupId>
@@ -188,18 +188,40 @@ SOFTWARE.
       <artifactId>ojdbc8</artifactId>
       <version>21.5.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.pf4j</groupId>
+      <artifactId>pf4j</artifactId>
+      <version>3.6.0</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>2.10.0</version>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>3.1.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+            <manifestEntries>
+              <Plugin-Id>admin-plugin</Plugin-Id>
+              <Plugin-Version>${project.version}</Plugin-Version>
+              <Plugin-Provider>Surati</Plugin-Provider>
+              <Plugin-Class>io.surati.gap.admin.module.AdminPlugin</Plugin-Class>
+              <Plugin-License>Surati License</Plugin-License>
+              <Plugin-Dependencies/>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
