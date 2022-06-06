@@ -46,7 +46,7 @@ public final class AdminPlugin extends Plugin {
         }
     }
 
-    @Extension
+    @Extension(ordinal = 1)
     public static final class AdminDatabaseSetup implements DatabaseSetup {
 
         @Override
@@ -59,7 +59,7 @@ public final class AdminPlugin extends Plugin {
         }
     }
 
-    @Extension
+    @Extension(ordinal = 1)
     public static final class AdminWebFront implements WebFront {
 
         @Override
